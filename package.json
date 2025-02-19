@@ -19,6 +19,7 @@
   "homepage": "https://github.com/erybie222/Anabolic-Food#readme",
   "dependencies": {
     "bootstrap": "^5.3.3",
+    "ejs": "^3.1.10",
     "express": "^4.21.2"
   },
   "devDependencies": {
