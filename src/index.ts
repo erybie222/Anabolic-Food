@@ -17,20 +17,23 @@ app.use(express.json());
 
 
 connectDB();
-async function getRecipes(){
+ async function getRecipes(){
     const recipes = await client.query("SELECT * FROM RECIPES");
     return recipes.rows;
 }
-async function getCarouselPhotos(){
-    const carouselPhotosUrl = await client.query("SELECT photo FROM PHOTOS LIMIT 3")
+
+async function getRandomPhotos(numberOfPhotos:number){
+
+    const carouselPhotosUrl = await client.query("SELECT DISTINCT ON (recipe_id) photo FROM PHOTOS ORDER BY recipe_id, random() LIMIT $1", [numberOfPhotos]);
     return carouselPhotosUrl.rows;
 }
 
 
 app.get("/", async(req: Request, res: Response) => {
-    const carouselPhotosUrl = await getCarouselPhotos();
+    const carouselPhotosUrl = await getRandomPhotos(3);
     res.render("index", {carouselPhotosUrl: carouselPhotosUrl});
 })
+
 app.get("/recipes", async (req: Request, res: Response) => {
     const recipes = await getRecipes();
     res.render("pages/recipes", {recipes: recipes});
@@ -81,7 +84,7 @@ app.get("/recipes", async (req: Request, res: Response) => {
     catch(err){
         await client.query("ROLLBACK");
         console.log(err);
-        res.status(500).json({ message: "Error adding image" });
+        res.status(500).json({ message: "Error adding reci[e" });
         return;
     }
     
