@@ -36,6 +36,11 @@ app.get("/contact", (req: Request, res: Response) => {
 app.get("/about", (req: Request, res: Response) => {
     res.render("pages/about");
 })
+
+app.get("/login", (req: Request, res: Response) => {
+    res.render("pages/login");
+})
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
   });
