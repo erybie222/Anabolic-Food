@@ -24,7 +24,7 @@ connectDB();
 
 async function getRandomPhotos(numberOfPhotos:number){
 
-    const randomPhotos = await client.query("SELECT DISTINCT ON (recipe_id) photo FROM PHOTOS ORDER BY recipe_id, random() LIMIT $1", [numberOfPhotos]);
+    const randomPhotos = await client.query("SELECT photo FROM  PHOTOS ORDER BY random() LIMIT $1", [numberOfPhotos]);
     return randomPhotos.rows;
 }
 
