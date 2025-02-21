@@ -30,12 +30,22 @@ app.get("/recipes", async (req: Request, res: Response) => {
     res.render("pages/recipes", {recipes: recipes});
 
 })
+
+// app.post("/recipes",async (req: Request, res: Response) => {
+    
+// });
+
 app.get("/contact", (req: Request, res: Response) => {
     res.render("pages/contact");
 })
 app.get("/about", (req: Request, res: Response) => {
     res.render("pages/about");
 })
+
+app.get("/login", (req: Request, res: Response) => {
+    res.render("pages/login");
+})
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
   });

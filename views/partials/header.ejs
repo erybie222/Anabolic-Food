@@ -36,14 +36,35 @@
       />
       <button
         type="button"
+        class="btn btn-primary d-flex align-items-center gap-2"
+        id="add-recipe-btn"
+      >
+        <i class="bi bi-plus-lg"></i> Dodaj przepis
+      </button>
+
+      <button
+        type="button"
         class="btn btn-outline-primary btn-sm"
-        href="/login"
+        onclick="window.location.href='/login'"
       >
         Zaloguj się
       </button>
-      <button type="button" class="btn btn-primary btn-sm" href="/register">
+      <button
+        type="button"
+        class="btn btn-primary btn-sm"
+        onclick="window.location.href='/register'"
+      >
         Zarejestruj się
       </button>
     </div>
   </header>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const addRecipeButton = document.getElementById("add-recipe-btn");
+    if (addRecipeButton && !window.location.pathname.startsWith("/recipes")) {
+      addRecipeButton.classList.add("d-none"); // Ukrycie w stylu Bootstrapa
+    }
+  });
+</script>
