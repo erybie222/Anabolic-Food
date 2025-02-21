@@ -24,14 +24,14 @@ connectDB();
 
 async function getRandomPhotos(numberOfPhotos:number){
 
-    const carouselPhotosUrl = await client.query("SELECT DISTINCT ON (recipe_id) photo FROM PHOTOS ORDER BY recipe_id, random() LIMIT $1", [numberOfPhotos]);
-    return carouselPhotosUrl.rows;
+    const randomPhotos = await client.query("SELECT DISTINCT ON (recipe_id) photo FROM PHOTOS ORDER BY recipe_id, random() LIMIT $1", [numberOfPhotos]);
+    return randomPhotos.rows;
 }
 
 
 app.get("/", async(req: Request, res: Response) => {
-    const carouselPhotosUrl = await getRandomPhotos(3);
-    res.render("index", {carouselPhotosUrl: carouselPhotosUrl});
+    const randomPhotos = await getRandomPhotos(3);
+    res.render("index", {carouselPhotosUrl: randomPhotos});
 })
 
 app.get("/recipes", async (req: Request, res: Response) => {
