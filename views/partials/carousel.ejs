@@ -23,8 +23,12 @@
       class=""
     ></button>
   </div>
+
   <div class="carousel-inner">
-    <div class="carousel-item">
+    
+    <div class="carousel-item active" style="position: relative; height: 700px;">    
+      <img src="<%= carouselPhotosUrl[0].photo %>" alt="Could not load image!" 
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"/>
       <svg
         class="bd-placeholder-img"
         width="100%"
@@ -33,25 +37,23 @@
         aria-hidden="true"
         preserveAspectRatio="xMidYMid slice"
         focusable="false"
-      >
-        <rect
-          width="100%"
-          height="100%"
-          fill="var(--bs-secondary-color)"
-        ></rect>
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
+        <rect width="100%" height="100%" fill="black" opacity="0.4"></rect>
       </svg>
       <div class="container">
-        <div class="carousel-caption text-start">
-          <h1>Example headline.</h1>
+        <div class="carousel-caption text-start" style=" text-align: left; left: 5%;">
+          <!-- <h1>Example headline.</h1> -->
           <p class="opacity-75">
-            Some representative placeholder content for the first slide of the
-            carousel.
-          </p>
-          <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
+            <!-- cos -->
+          </p>        
+          <p><a class="btn btn-lg btn-primary" href="#">Sprawdź przepis</a></p>
         </div>
       </div>
     </div>
-    <div class="carousel-item active">
+
+    <div class="carousel-item" style="position: relative; height: 700px;">   
+      <img src="<%= carouselPhotosUrl[1].photo %>" alt="Could not load image!" 
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background-color: black;"/>
       <svg
         class="bd-placeholder-img"
         width="100%"
@@ -60,25 +62,23 @@
         aria-hidden="true"
         preserveAspectRatio="xMidYMid slice"
         focusable="false"
-      >
-        <rect
-          width="100%"
-          height="100%"
-          fill="var(--bs-secondary-color)"
-        ></rect>
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
+        <rect width="100%" height="100%" fill="black" opacity="0.4"></rect>
       </svg>
       <div class="container">
-        <div class="carousel-caption">
-          <h1>Another example headline.</h1>
-          <p>
-            Some representative placeholder content for the second slide of the
-            carousel.
-          </p>
-          <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
+        <div class="carousel-caption text-start" style=" text-align: left; left: 5%;">
+          <!-- <h1>Example headline.</h1> -->
+          <p class="opacity-75">
+            <!-- cos -->
+          </p>        
+          <p><a class="btn btn-lg btn-primary" href="#">Sprawdź przepis</a></p>
         </div>
       </div>
     </div>
-    <div class="carousel-item">
+
+    <div class="carousel-item" style="position: relative; height: 700px;">    
+      <img src="<%= carouselPhotosUrl[2].photo %>" alt="Could not load image!" 
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"/>
       <svg
         class="bd-placeholder-img"
         width="100%"
@@ -87,24 +87,21 @@
         aria-hidden="true"
         preserveAspectRatio="xMidYMid slice"
         focusable="false"
-      >
-        <rect
-          width="100%"
-          height="100%"
-          fill="var(--bs-secondary-color)"
-        ></rect>
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
+        <rect width="100%" height="100%" fill="black" opacity="0.4"></rect>
       </svg>
+
       <div class="container">
-        <div class="carousel-caption text-end">
-          <h1>One more for good measure.</h1>
-          <p>
-            Some representative placeholder content for the third slide of this
-            carousel.
-          </p>
-          <p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
+        <div class="carousel-caption text-start" style=" text-align: left; left: 5%;">
+          <!-- <h1>Example headline.</h1> -->
+          <p class="opacity-75">
+            <!-- cos -->
+          </p>        
+          <p><a class="btn btn-lg btn-primary" href="#">Sprawdź przepis</a></p>
         </div>
       </div>
     </div>
+
   </div>
   <button
     class="carousel-control-prev"

@@ -15,15 +15,19 @@ app.set('view engine', 'ejs');
 app.set("views", path.join(__dirname, "..", "views"));
 
 connectDB();
- async function getRecipes(){
+async function getRecipes(){
     const recipes = await client.query("SELECT * FROM RECIPES");
     return recipes.rows;
 }
+async function getCarouselPhotos(){
+    const carouselPhotosUrl = await client.query("SELECT photo FROM PHOTOS LIMIT 3")
+    return carouselPhotosUrl.rows;
+}
 
 
-
-app.get("/", (req: Request, res: Response) => {
-    res.render("index");
+app.get("/", async(req: Request, res: Response) => {
+    const carouselPhotosUrl = await getCarouselPhotos();
+    res.render("index", {carouselPhotosUrl: carouselPhotosUrl});
 })
 app.get("/recipes", async (req: Request, res: Response) => {
     const recipes = await getRecipes();
