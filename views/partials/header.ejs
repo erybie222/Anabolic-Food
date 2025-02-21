@@ -34,12 +34,8 @@
         placeholder="Search..."
         aria-label="Search"
       />
-      <button
-        type="button"
-        class="btn btn-primary d-flex align-items-center gap-2"
-        id="add-recipe-btn"
-      >
-        <i class="bi bi-plus-lg"></i> Dodaj przepis
+      <button type="button" class="btn btn-success btn-sm" id="add-recipe-btn">
+        Dodaj przepis
       </button>
 
       <button
@@ -64,7 +60,7 @@
   document.addEventListener("DOMContentLoaded", function () {
     const addRecipeButton = document.getElementById("add-recipe-btn");
     if (addRecipeButton && !window.location.pathname.startsWith("/recipes")) {
-      addRecipeButton.classList.add("d-none"); // Ukrycie w stylu Bootstrapa
+      addRecipeButton.classList.add("d-none");
     }
   });
 </script>
