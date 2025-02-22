@@ -16,9 +16,6 @@ app.set("views", path.join(__dirname, "..", "views"));
 app.use(express.json());
 
 connectDB();
-async function getRecipes() {
-  const recipes = await client.query("SELECT * FROM RECIPES");
-  return recipes.rows;
 async function getRecipes(){
     const recipes = await client.query("SELECT * FROM RECIPES");
     return recipes.rows;
@@ -27,7 +24,7 @@ async function getRecipes(){
 async function getRandomPhotos(numberOfPhotos: number) {
   const randomPhotos = await client.query(
     "SELECT photo FROM  PHOTOS ORDER BY random() LIMIT $1",
-    [numberOfPhotos],
+    [numberOfPhotos]
   );
   return randomPhotos.rows;
 }
