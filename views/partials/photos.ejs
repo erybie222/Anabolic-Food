@@ -1,32 +1,45 @@
 <div class="container-fluid">
-  <div class="row gx-0 vh-50">
+  <div class="row gx-3 gy-3 min-vh-50">
+    <!-- Pierwsza kolumna -->
     <div class="col-md-6 d-flex flex-column">
-      <div
-        class="bg-body-tertiary d-flex flex-column justify-content-center align-items-center flex-grow-1 text-center overflow-hidden"
-      >
+      <div class="bg-body-tertiary d-flex flex-column justify-content-center align-items-center flex-grow-1 text-center">
         <div class="my-3 p-3">
           <h2 class="display-5">Another headline</h2>
           <p class="lead">And an even wittier subheading.</p>
         </div>
       </div>
-      <div
-        class="bg-body shadow-sm w-100"
-        style="min-height: 300px; border-radius: 21px 21px 0 0"
-      ></div>
+      <div class="bg-body shadow-lg w-100 rounded-4 overflow-hidden" style="height: 600px;">
+        <% if (photo1) { %>
+          <img 
+            src="<%= photo1.photo %>" 
+            class="img-fluid"
+            style="width: 100%; height: 100%; object-fit: cover;"
+          />
+        <% } else { %>
+          <p class="text-center text-muted mt-5">Brak zdjęcia</p>
+        <% } %>
+      </div>
     </div>
+
+    <!-- Druga kolumna -->
     <div class="col-md-6 d-flex flex-column">
-      <div
-        class="bg-body-tertiary d-flex flex-column justify-content-center align-items-center flex-grow-1 text-center overflow-hidden"
-      >
+      <div class="bg-body-tertiary d-flex flex-column justify-content-center align-items-center flex-grow-1 text-center">
         <div class="my-3 p-3">
           <h2 class="display-5">Another headline</h2>
           <p class="lead">And an even wittier subheading.</p>
         </div>
       </div>
-      <div
-        class="bg-body shadow-sm w-100"
-        style="min-height: 300px; border-radius: 21px 21px 0 0"
-      ></div>
+      <div class="bg-body shadow-lg w-100 rounded-4 overflow-hidden" style="height: 600px;">
+        <% if (photo2) { %>
+          <img 
+            src="<%= photo2.photo %>" 
+            class="img-fluid"
+            style="width: 100%; height: 100%; object-fit: cover;"
+          />
+        <% } else { %>
+          <p class="text-center text-muted mt-5">Brak zdjęcia</p>
+        <% } %>
+      </div>
     </div>
   </div>
 </div>

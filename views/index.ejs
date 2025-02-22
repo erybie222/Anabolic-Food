@@ -17,14 +17,17 @@
     <title>Document</title>
   </head>
   <body data-bs-theme="dark">
-    <%-include('partials/header') %>
-
-    <%- include('partials/carousel') %> 
-
-    <%-include('partials/photos') %> 
-    <%-include('partials/photos') %> 
-    <%-include('partials/photos') %> 
-
-    <%-include('partials/footer') %>
+    <%-include('partials/header') %> <%- include('partials/carousel') %>
+    <% for (let i = 0; i < 3; i++) { %>
+      <%- include('partials/photos', { 
+        photo1: componentPhotosUrl[i * 2] || null, 
+        photo2: componentPhotosUrl[i * 2 + 1] || null 
+      }) %>
+    <% } %>
+    
+    <%- include('partials/footer') %> 
+    
+    
+    
   </body>
 </html>

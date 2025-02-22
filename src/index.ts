@@ -36,8 +36,10 @@ async function getDiets(){
 
 
 app.get("/", async(req: Request, res: Response) => {
-    const randomPhotos = await getRandomPhotos(3);
-    res.render("index", {carouselPhotosUrl: randomPhotos});
+    const carouselRandomPhotos = await getRandomPhotos(3);
+    const componentRandomPhotos = await getRandomPhotos(6);
+   // console.log("🚀 componentPhotosUrl:", componentRandomPhotos);
+    res.render("index", {carouselPhotosUrl: carouselRandomPhotos, componentPhotosUrl: componentRandomPhotos});
 })
 
 app.get("/recipes", async (req: Request, res: Response) => {
