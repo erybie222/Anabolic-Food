@@ -17,7 +17,7 @@ app.use(express.json());
 
 
 connectDB();
- async function getRecipes(){
+async function getRecipes(){
     const recipes = await client.query("SELECT * FROM RECIPES");
     return recipes.rows;
 }
@@ -28,6 +28,11 @@ async function getRandomPhotos(numberOfPhotos:number){
     return randomPhotos.rows;
 }
 
+async function getDiets(){
+    const diet_names = await client.query("SELECT diet_name FROM DIETS");
+    return diet_names.rows;
+}
+
 
 app.get("/", async(req: Request, res: Response) => {
     const randomPhotos = await getRandomPhotos(3);
@@ -36,8 +41,9 @@ app.get("/", async(req: Request, res: Response) => {
 
 app.get("/recipes", async (req: Request, res: Response) => {
     const recipes = await getRecipes();
-    res.render("pages/recipes", {recipes: recipes});
-
+    // recipes, bedzie zabierac duzo pamieci(wszystkie kolumny) ^^
+    const diets = await getDiets();
+    res.render("pages/recipes", {recipes: recipes, diets:diets});
 })
 
  app.post("/add_recipe", async (req: Request, res: Response) => {

@@ -109,14 +109,24 @@
             </div>
           </div>
 
-          <div class="mb-3">
-            <label class="form-label"></label>
+          <div class="mb-1">
+            <label class="form-label">Masa lub Redukcja</label>
             <select class="form-select" name="bulk_cut" required>
               <option value="true">Masa</option>
               <option value="false">Redukcja</option>
             </select>
           </div>
 
+          <div class="mb-3">
+            <label class="form-label" for="diet">Dieta</label>
+            <input list="diet-options" id="diet" name="diet" class="form-control" required>
+            <datalist id="diet-options">
+              <% diets.forEach(diet => { %>
+                  <option value="<%= diet.diet_name %>"></option>
+              <% }); %>
+            </datalist>
+          </div>
+          
           <h4>Zdjęcie</h4>
           <div class="mb-3">
             <label for="imageInput" class="form-label"></label>
