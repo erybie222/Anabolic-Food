@@ -128,6 +128,40 @@ app.post("/add_recipe", async (req: Request, res: Response) => {
       await Promise.all(ingredientQueries);
     }
 
+    // const diet = req.body.diet;
+
+    //   if (diet.length > 0) {
+    //       const dietResult = await client.query(
+    //         `INSERT INTO DIETS (diet_name) 
+    //                    VALUES ($1) 
+    //                    ON CONFLICT (diet_name) DO NOTHING 
+    //                    RETURNING diet_id`,
+    //         [diet],
+    //       );
+    //       let dietID: number | null =
+    //       dietResult.rows[0]?.diet_id || null;
+  
+    //       if (!dietID) {
+    //         const existingDiet = await client.query(
+    //           "SELECT diet_id FROM DIETS WHERE diet_name = $1",
+    //           [diet]
+    //         );
+  
+    //         dietID = existingDiet.rows[0]?.diet_id || null;
+    //         if (!dietID) {
+    //           console.error(
+    //             `❌ Nie znaleziono ID diety dla: ${diet}`,
+    //           );
+    //           return;
+    //         }
+    //       }
+  
+    //       await client.query(
+    //         "INSERT INTO DIET_RECIPES (recipe_id, diet_id) VALUES ($1, $2)",
+    //         [recipeId, dietID],
+    //       );
+    //    }
+
     await client.query("COMMIT");
 
     res.status(201).json({
