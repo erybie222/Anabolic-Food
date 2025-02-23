@@ -104,15 +104,9 @@
             </select>
           </div>
           <h4>Zdjęcie</h4>
-          <form
-            id="uploadForm"
-            action="/upload"
-            method="POST"
-            enctype="multipart/form-data"
-            class="border p-4 rounded shadow"
-          >
+          <div class="border p-4 rounded shadow">
             <div class="mb-3">
-              <label for="imageInput" class="form-label"></label>
+              <label for="imageInput" class="form-label">Wybierz zdjęcie</label>
               <input
                 class="form-control"
                 type="file"
@@ -122,17 +116,15 @@
                 required
               />
             </div>
-
-            <div class="mb-3">
+            <div class="mb-3 d-flex justify-content-center">
               <img
                 id="imagePreview"
                 class="img-thumbnail d-none"
-                style="max-width: 200px"
+                style="max-width: 100%; max-height: 300px; object-fit: contain"
               />
             </div>
+          </div>
 
-            <button type="submit" class="btn btn-primary">Prześlij</button>
-          </form>
           <h4>Składniki</h4>
           <div id="ingredients">
             <div class="row mb-2">
@@ -171,10 +163,11 @@
               </div>
             </div>
           </div>
-          <button type="button" class="btn btn-secondary" id="addIngredient">
-            Dodaj Składnik
-          </button>
-          <div class="mt-3">
+
+          <div class="d-flex justify-content-between mt-3">
+            <button type="button" class="btn btn-secondary" id="addIngredient">
+              Dodaj Składnik
+            </button>
             <button type="submit" class="btn btn-primary">Dodaj Przepis</button>
           </div>
         </form>
