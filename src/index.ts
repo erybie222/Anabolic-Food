@@ -112,44 +112,46 @@ app.post("/add_recipe", async (req: Request, res: Response) => {
       photoId = photoResult.rows[0]?.photo_id || null;
     }
 
-    const ingredients = req.body.ingredients || [];
+    const ingredientNames = req.body.ingredient_name || [];
+    const quantities = req.body.quantity || [];
+    const units = req.body.unit || [];
 
-    if (ingredients.length > 0) {
-      const ingredientQueries = ingredients.map(async (ingredient: any) => {
-        const { ingredient_name, quantity, unit } = ingredient;
-
-        const ingredientResult = await client.query(
-          `INSERT INTO INGREDIENTS (ingredient_name) 
-                     VALUES ($1) 
-                     ON CONFLICT (ingredient_name) DO NOTHING 
-                     RETURNING ingredient_id`,
-          [ingredient_name],
-        );
-        let ingredientId: number | null =
-          ingredientResult.rows[0]?.ingredient_id || null;
-
-        if (!ingredientId) {
-          const existingIngredient = await client.query(
-            "SELECT ingredient_id FROM INGREDIENTS WHERE ingredient_name = $1",
-            [ingredient_name],
+    if (ingredientNames.length > 0) {
+      try {
+        for (let i = 0; i < ingredientNames.length; i++) {
+          const ingredient = ingredientNames[i] || "";
+          const quantity = quantities[i] || "0"; 
+          const unit = units[i] || ""; 
+          const result = await client.query(`
+            INSERT INTO INGREDIENTS (ingredient_name) 
+            VALUES ($1) 
+            ON CONFLICT (ingredient_name) DO NOTHING 
+            RETURNING ingredient_id`,
+            [ingredient]
           );
+          let ingredientId = result.rows[0]?.ingredient_id || null;
 
-          ingredientId = existingIngredient.rows[0]?.ingredient_id || null;
-          if (!ingredientId) {
-            console.error(
-              `❌ Nie znaleziono ID składnika dla: ${ingredient_name}`,
+          if(ingredientId==null){
+            const existingResult = await client.query(
+              "SELECT ingredient_id FROM INGREDIENTS WHERE ingredient_name = $1",
+              [ingredient]
             );
-            return;
+            ingredientId = existingResult.rows[0]?.ingredient_id || null;
+            if(ingredientId == null) {
+              console.error(`❌ Błąd: Nie znaleziono ID składnika dla: ${ingredient}`);
+              throw new Error(`❌ Brak składnika w bazie: ${ingredient}`);
+            }
           }
+
+          await client.query(
+            "INSERT INTO RECIPES_INGREDIENTS (recipe_id, ingredient_id, quantity, unit) VALUES ($1, $2, $3, $4)",
+            [recipeId, ingredientId, quantity, unit],
+          );
         }
-
-        await client.query(
-          "INSERT INTO RECIPES_INGREDIENTS (recipe_id, ingredient_id, quantity, unit) VALUES ($1, $2, $3, $4)",
-          [recipeId, ingredientId, quantity, unit],
-        );
-      });
-
-      await Promise.all(ingredientQueries);
+      } catch (error) {
+        console.error("❌ Błąd główny podczas dodawania składników:", error);
+        res.status(500).json({ error: "Błąd serwera" });
+      }
     }
 
     await client.query("COMMIT");
