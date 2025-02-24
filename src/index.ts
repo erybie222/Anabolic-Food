@@ -55,7 +55,7 @@ app.get("/", async(req: Request, res: Response) => {
       title: titlesMap.get(photo.recipe_id) || "Brak tytułu"
     }));
    // console.log("🚀 componentPhotosUrl:", componentRandomPhotos);
-   console.log("🚀 carouselPhotosUrl:", carouselRandomPhotos);
+   //console.log("🚀 carouselPhotosUrl:", carouselRandomPhotos);
 
 
     res.render("index", {carouselPhotosUrl: carouselRandomPhotos, photosWithTitles: photosWithTitles});
@@ -163,6 +163,48 @@ app.post("/add_recipe", async (req: Request, res: Response) => {
   }
 });
 
+app.post("/login", async (req: Request, res: Response) => {
+  try {
+    const checkUser = req.body;
+    }
+  
+  catch(err) {
+    console.log(err);
+  }
+});
+
+
+app.post("/register", async (req: Request, res: Response) => {
+  try {
+    await client.query("BEGIN");
+    let newUser = req.body;
+   // console.log(newUser);
+
+    newUser= 
+    {
+      email: newUser.email,
+      username: newUser.username,
+      password: newUser.password,
+    }
+
+   // console.log(newUser);
+
+    const userResult = await client.query(
+      "INSERT INTO USERS (email, username, password) VALUES ($1 , $2 , $3 ) RETURNING user_id",
+      Object.values(newUser),
+    );
+
+    await client.query("COMMIT");
+    res.status(201).json({
+      message: "New user added successfully"
+    });
+    }
+  
+  catch(err) {
+    console.log(err);
+  }
+});
+
 app.get("/contact", (req: Request, res: Response) => {
   res.render("pages/contact");
 });
@@ -172,6 +214,10 @@ app.get("/about", (req: Request, res: Response) => {
 
 app.get("/login", (req: Request, res: Response) => {
   res.render("pages/login");
+});
+
+app.get("/register", (req: Request, res: Response) => {
+  res.render("pages/register");
 });
 
 app.listen(port, () => {
