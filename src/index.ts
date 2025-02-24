@@ -11,12 +11,13 @@ const saltRounds = 10;
 dotenv.config();
 const app: Application = express();
 const port = 3000;
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "..", "views"));
-app.use(express.json());
+
 
 connectDB();
 async function getRecipes(){
@@ -170,8 +171,35 @@ app.post("/add_recipe", async (req: Request, res: Response) => {
 
 app.post("/login", async (req: Request, res: Response) => {
   try {
-    const checkUser = req.body;
+    
+    const {email , password} = req.body;
+    console.log(email, password);
+    if(!email || !password)
+    {
+      res.status(400).json({ error: "All fields are required" });
+      return;
     }
+    const result = await client.query("SELECT * FROM USERS WHERE email = $1", [email]);
+    if(result.rows.length === 0 )
+    {
+      res.send("User not found");
+      return;
+    }
+    const user = result.rows[0];
+    const storedPassword = user.password;
+    
+    bcrypt.compare(password, storedPassword, (err, isMatch)=>{
+      if (err) {
+        console.log(err);
+      }
+      if (isMatch) {
+        res.send("Logged in successfully")
+      } else {
+        res.send("Incorrect Password");
+      }
+    })
+    }
+
   
   catch(err) {
     console.log(err);
