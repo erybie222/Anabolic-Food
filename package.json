@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/erybie222/Anabolic-Food#readme",
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.3",
     "dotenv": "^16.4.7",
     "ejs": "^3.1.10",

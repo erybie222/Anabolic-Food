@@ -1,9 +1,12 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, Application } from "express";
 import path from "path";
 import bodyParser, { text } from "body-parser";
 import pg from "pg";
 import dotenv from "dotenv";
 import { connectDB, client } from "./db";
+import bcrypt from "bcrypt";
+
+const saltRounds = 10;
 
 dotenv.config();
 const app = express();
@@ -175,33 +178,51 @@ app.post("/login", async (req: Request, res: Response) => {
 
 
 app.post("/register", async (req: Request, res: Response) => {
+  let transactionStarted = false;
   try {
-    await client.query("BEGIN");
-    let newUser = req.body;
+  
+    const { email, username, password, confirm_password } = req.body;
    // console.log(newUser);
-
-    newUser= 
+   if (!email || !username || !password || !confirm_password) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+   if(password !== confirm_password){
+    return res.status(400).json({ error: "Passwords do not match" });
+  }
+    
+ 
+    const checkEmail = await client.query("SELECT EXISTS(SELECT 1 FROM USERS WHERE email = $1)", [email]);
+   // console.log(newUser);
+    if(checkEmail.rows[0].exists)
     {
-      email: newUser.email,
-      username: newUser.username,
-      password: newUser.password,
+      
+      return res.status(400).json({ error: "Email already exists. Try logging in." });
     }
-
-   // console.log(newUser);
-
+    await client.query("BEGIN");
+    transactionStarted = true;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
     const userResult = await client.query(
       "INSERT INTO USERS (email, username, password) VALUES ($1 , $2 , $3 ) RETURNING user_id",
-      Object.values(newUser),
+      [email, username, hashedPassword],
     );
-
     await client.query("COMMIT");
-    res.status(201).json({
-      message: "New user added successfully"
+    return res.status(201).json({
+      message: "New user added successfully",
+      userId: userResult.rows[0].user_id,
     });
+    
+  
+   
     }
   
   catch(err) {
-    console.log(err);
+    if(transactionStarted)
+    {
+      await client.query("ROLLBACK")
+    }
+    
+    console.error("Error in /register:", err);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
