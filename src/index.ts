@@ -9,7 +9,7 @@ import bcrypt from "bcrypt";
 const saltRounds = 10;
 
 dotenv.config();
-const app = express();
+const app: Application = express();
 const port = 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 
