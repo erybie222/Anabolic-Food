@@ -1,4 +1,4 @@
-import bodyParser, { text } from "body-parser";
+
 import { client } from "../db";
 import  { Request, Response,  } from "express";
 import bcrypt from "bcrypt";
