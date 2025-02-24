@@ -20,8 +20,10 @@
     <%-include('partials/header') %> <%- include('partials/carousel') %>
     <% for (let i = 0; i < 3; i++) { %>
       <%- include('partials/photos', { 
-        photo1: componentPhotosUrl[i * 2] || null, 
-        photo2: componentPhotosUrl[i * 2 + 1] || null 
+        photo1: photosWithTitles[i * 2]?.photo || null, 
+        photo2: photosWithTitles[i * 2 + 1]?.photo || null,
+        title1: photosWithTitles[i * 2]?.title || "Brak tytułu", 
+        title2: photosWithTitles[i * 2 + 1]?.title || "Brak tytułu"
       }) %>
     <% } %>
     

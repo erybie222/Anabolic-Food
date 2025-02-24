@@ -23,7 +23,7 @@ async function getRecipes(){
 
 async function getRandomPhotos(numberOfPhotos: number) {
   const randomPhotos = await client.query(
-    "SELECT photo FROM  PHOTOS ORDER BY random() LIMIT $1",
+    "SELECT photo, recipe_id FROM  PHOTOS ORDER BY random() LIMIT $1",
     [numberOfPhotos]
   );
   return randomPhotos.rows;
@@ -34,12 +34,31 @@ async function getDiets(){
     return diet_names.rows;
 }
 
+async function getTitles(recipeIds : number[]) {
+
+  if (recipeIds.length === 0) return [];
+
+  const titlesResult = await client.query("SELECT recipe_id , description from RECIPES WHERE recipe_id = ANY($1)", [recipeIds]);
+  return titlesResult.rows;
+}
+
 
 app.get("/", async(req: Request, res: Response) => {
     const carouselRandomPhotos = await getRandomPhotos(3);
     const componentRandomPhotos = await getRandomPhotos(6);
+    const recipeIds = componentRandomPhotos.map(photo => photo.recipe_id);
+    const componentTitles = await getTitles(recipeIds);
+    const titlesMap = new Map(componentTitles.map(title => [title.recipe_id, title.description]));
+    const photosWithTitles = componentRandomPhotos.map(photo => ({
+      photo: photo.photo,
+      recipe_id: photo.recipe_id,
+      title: titlesMap.get(photo.recipe_id) || "Brak tytułu"
+    }));
    // console.log("🚀 componentPhotosUrl:", componentRandomPhotos);
-    res.render("index", {carouselPhotosUrl: carouselRandomPhotos, componentPhotosUrl: componentRandomPhotos});
+   console.log("🚀 carouselPhotosUrl:", carouselRandomPhotos);
+
+
+    res.render("index", {carouselPhotosUrl: carouselRandomPhotos, photosWithTitles: photosWithTitles});
 })
 
 app.get("/recipes", async (req: Request, res: Response) => {
