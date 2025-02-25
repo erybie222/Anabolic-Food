@@ -21,10 +21,11 @@
     <%- include('../partials/header') %>
     <div class="container mt-5">
       <div id="recipeForm" style="display: none">
-        <h2>Dodaj Nowy Przepis</h2>
+        <h2 style="text-align: center;">Dodaj Nowy Przepis</h2>
         <form action="/recipes/add_recipe" method="POST">
+          <h4 style="margin-bottom: -15px;">Nazwa przepisu</h4>
           <div class="mb-3">
-            <label for="description" class="form-label">Opis</label>
+            <label for="description" class="form-label"></label>
             <input
               type="text"
               class="form-control"
@@ -33,8 +34,9 @@
               required
             />
           </div>
+          <h4 style="margin-bottom: -15px;">Instrukcja</h4>
           <div class="mb-3">
-            <label for="instruction" class="form-label">Instrukcja</label>
+            <label for="instruction" class="form-label"></label>
             <textarea
               class="form-control"
               id="instruction"
@@ -43,8 +45,9 @@
               required
             ></textarea>
           </div>
+          <h4 style="margin-bottom: -15px;">Posiłek</h4>
           <div class="mb-3">
-            <label class="form-label">Posiłek</label>
+            <label class="form-label"></label>
             <select class="form-select" name="meal" required>
               <option value="Śniadanie">Śniadanie</option>
               <option value="Obiad">Obiad</option>
@@ -53,6 +56,19 @@
               <option value="Przekąska">Przekąska</option>
             </select>
           </div>
+
+          <h4 style="margin-bottom: -15px;">Czas przygotowania w minutach</h4>
+          <div class="mb-3">
+            <label for="making_time" class="form-label"></label>
+            <input
+              type="number"
+              step="1"
+              class="form-control"
+              name="making_time"
+              required
+            />
+          </div>
+
           <h4 style="margin-bottom: -15px;">Kalorie</h4>
           <div class="mb-3">
             <label for="calories" class="form-label"></label>
@@ -97,16 +113,19 @@
               />
             </div>
           </div>
+
+          <h4 style="margin-bottom: -15px;">Masa czy Redukcja</h4>
           <div class="mb-3">
-            <label class="form-label">Masa czy Redukcja</label>
+            <label class="form-label"></label>
             <select class="form-select" name="bulk_cut" required>
               <option value="true">Masa</option>
               <option value="false">Redukcja</option>
             </select>
           </div>
 
+          <h4 style="margin-bottom: -15px;">Dieta</h4>
           <div class="mb-3">
-            <label class="form-label" for="diet">Dieta</label>
+            <label class="form-label" for="diet"></label>
             <input list="diet-options" id="diet" type="text" name="diet" class="form-control" required>
             <datalist id="diet-options">
               <% diets.forEach(diet => { %>
