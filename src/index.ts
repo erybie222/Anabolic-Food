@@ -40,7 +40,10 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "..", "views"));
 const router = express.Router();
-
+app.use((req, res, next) => {
+  res.locals.user = req.user || null; // Przekazuje użytkownika do EJS
+  next();
+});
 app.use("/", homeRoutes);
 app.use("/recipes", recipesRoutes);
 app.use("/auth", authRoutes);
@@ -56,6 +59,8 @@ app.use((req, res, next) => {
   console.log("🔎 Middleware check: req.user =", req.user);
   next();
 });
+
+
 
 connectDB();
 

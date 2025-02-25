@@ -9,7 +9,7 @@ export const getRecipes = async () => {
           FROM RECIPES
           LEFT JOIN PHOTOS ON RECIPES.recipe_id = PHOTOS.recipe_id
       `);
-      console.log("✅ Recipes fetched from DB:", recipes.rows); // Debug
+      //console.log("✅ Recipes fetched from DB:", recipes.rows); // Debug
       return recipes.rows;
   }
   catch (err) {
