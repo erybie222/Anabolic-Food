@@ -97,7 +97,7 @@
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-label"></label>
+            <label class="form-label">Masa czy Redukcja</label>
             <select class="form-select" name="bulk_cut" required>
               <option value="true">Masa</option>
               <option value="false">Redukcja</option>
@@ -223,6 +223,29 @@
         if (event.target.classList.contains("remove-ingredient")) {
           event.target.closest(".row").remove();
         }
+      });
+
+      window.onload = function () {
+        let form = document.querySelector("form");
+        if (form) {
+          form.reset();
+        }
+
+        let inputs = document.querySelectorAll("input, textarea, select");
+        inputs.forEach(input => {
+          if (input.type !== "submit" && input.type !== "file") {
+            input.value = "";
+          }
+        });
+
+        console.log("✅ Formularz został zresetowany po odświeżeniu.");
+      };
+
+      document.querySelector("form").addEventListener("submit", function () {
+        setTimeout(() => {
+          this.reset(); 
+          console.log("✅ Formularz został zresetowany po dodaniu przepisu.");
+        }, 100); 
       });
     </script>
     <%- include('../partials/footer') %>
