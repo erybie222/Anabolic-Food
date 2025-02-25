@@ -52,7 +52,7 @@ export const getRandomPhotos = async ( numberOfPhotos: number) => {
      }
  }
 
-export const addRecipe = async (req: Request, res: Response) => {
+export const addRecipe = async (req: Request, res: Response) : Promise<void> => {
     // const client = await connectDB();
     try {
       await client.query("BEGIN");
@@ -63,6 +63,12 @@ export const addRecipe = async (req: Request, res: Response) => {
         meal: req.body.meal,
         bulk_cut: req.body.bulk_cut,
       };
+      
+      const userId = req.user?.user_id;
+      if (!userId) {
+        res.status(401).json({ error: "Unauthorized. Please log in." });
+        return;
+      }
   
       const recipeResult = await client.query(
         "INSERT INTO RECIPES (description, instruction, meal, bulk_cut) VALUES ($1 , $2 , $3 , $4) RETURNING recipe_id",

@@ -5,7 +5,14 @@ const router = Router();
 
 router.get("/", renderHomePage);
 router.get("/contact", renderStaticPage("contact"));
-router.get("/about", renderStaticPage("about"));
+router.get("/about", (req, res) => {
+    if(req.isAuthenticated()){
+        renderStaticPage("secret");
+    }
+    else{
+  renderStaticPage("about" )
+    }
+   });
 router.get("/login", renderStaticPage("login"));
 router.get("/register", renderStaticPage("register"));
 
