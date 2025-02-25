@@ -6,43 +6,53 @@ const saltRounds = 10;
 
 
 
-
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     
     const {email , password} = req.body;
      console.log(email, password);
      if(!email || !password)
      {
-      res.status(400).json({ error: "All fields are required" });
-       return;
+        res.status(400).json({ error: "All fields are required" });
+        return;
     }
      const result = await client.query("SELECT * FROM USERS WHERE email = $1", [email]);
     if(result.rows.length === 0 )
     {
-      res.send("User not found");
-      return;
+     res.status(404).json({error: "User not found"});
+     return;
     }
     const user = result.rows[0];
     const storedPassword = user.password;
     
-    bcrypt.compare(password, storedPassword, (err, isMatch)=>{
-      if (err) {
-        console.log(err);
-      }
-      if (isMatch) {
-        res.send("Logged in successfully")
-      } else {
-        res.send("Incorrect Password");
-      }
-    })
-    }
-
-  
-  catch(err) {
-    console.log(err);
+   const isMatch = await bcrypt.compare(password, storedPassword);
+   if (!isMatch) {
+     res.status(401).json({ error: "Incorrect password" });
+    return;
   }
+  req.logIn(user, (err) => {
+    if (err) {
+      console.error("❌ Login error:", err);
+      return res.status(500).json({ error: "Login failed" });
+    }
+  
+    req.session.save((err) => {
+      if (err) {
+        console.error("❌ Session save error:", err);
+        return res.status(500).json({ error: "Session save failed" });
+      }
+      console.log("✅ Session saved successfully:", req.session);
+      res.status(200).json({ message: "Login successful", user });
+    });
+  });
+} catch (err) {
+  console.error("❌ Error in login:", err);
+  res.status(500).json({ error: "Internal Server Error" });
 }
+};
+
+
+
 
 
 export const register =  async (req: Request, res: Response): Promise<void> => {
@@ -98,3 +108,4 @@ export const register =  async (req: Request, res: Response): Promise<void> => {
     return;
   }
 }
+
