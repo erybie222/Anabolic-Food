@@ -201,6 +201,6 @@ export const getRecipesPage= async (req: Request, res: Response) => {
         const recipes = await getRecipes();
         // recipes, bedzie zabierac duzo pamieci(wszystkie kolumny) ^^
         const diets = await getDiets();
-        console.log(recipes);
+        // console.log(recipes);
         res.render("pages/recipes", {recipes: recipes, diets:diets});
     }

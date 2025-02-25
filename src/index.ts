@@ -28,7 +28,7 @@ app.use(session({
   cookie: { secure: false, httpOnly: true }
 }));
 app.use((req, res, next) => {
-  console.log("User:", req.user);
+  // console.log("User:", req.user);
   next();
 });
 
@@ -49,14 +49,14 @@ app.use("/recipes", recipesRoutes);
 app.use("/auth", authRoutes);
 
 app.use((req, res, next) => {
-  console.log("🔎 Cookies:", req.cookies);
-  console.log("🔎 Session ID:", req.sessionID);
-  console.log("🔎 Session object:", req.session);
+  // console.log("🔎 Cookies:", req.cookies);
+  // console.log("🔎 Session ID:", req.sessionID);
+  // console.log("🔎 Session object:", req.session);
   next();
 });
 
 app.use((req, res, next) => {
-  console.log("🔎 Middleware check: req.user =", req.user);
+  // console.log("🔎 Middleware check: req.user =", req.user);
   next();
 });
 

@@ -10,7 +10,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     
     const {email , password} = req.body;
-     console.log(email, password);
+    //  console.log(email, password);
      if(!email || !password)
      {
         res.status(400).json({ error: "All fields are required" });
@@ -41,7 +41,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         console.error("❌ Session save error:", err);
         return res.status(500).json({ error: "Session save failed" });
       }
-      console.log("✅ Session saved successfully:", req.session);
+      // console.log("✅ Session saved successfully:", req.session);
       res.status(200).json({ message: "Login successful", user });
     });
   });
