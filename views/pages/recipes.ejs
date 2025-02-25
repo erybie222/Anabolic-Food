@@ -17,6 +17,7 @@
     ></script>
   </head>
   <body data-bs-theme="dark">
+    <div class ="container h-100" >
     <%- include('../partials/header') %>
     <div class="container mt-5">
       <div id="recipeForm" style="display: none">
@@ -185,71 +186,97 @@
       </div>
     </div>
 
-    <script>
-      document
-        .getElementById("add-recipe-btn")
-        .addEventListener("click", function () {
-          let form = document.getElementById("recipeForm");
-          if (form.style.display === "none") {
-            form.style.display = "block";
-          } else {
-            form.style.display = "none";
-          }
-        });
+   
 
-      document
-        .getElementById("addIngredient")
-        .addEventListener("click", function () {
-          let ingredientDiv = document.createElement("div");
-          ingredientDiv.classList.add("row", "mb-2");
-          ingredientDiv.innerHTML = `
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      <% recipes.forEach(recipe => { %>
         <div class="col">
-          <input type="text" class="form-control" name="ingredient_name[]" placeholder="Nazwa składnika" required>
+          <div class="card shadow-sm">
+            <img src="<%= recipe.photo %>" class="card-img-top" alt="Zdjęcie przepisu">
+            <div class="card-body">
+              <p class="card-text"><%=recipe.description%></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-body-secondary">9 mins</small>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col">
-          <input type="number" step="0.01" class="form-control" name="quantity[]" placeholder="Ilość" required>
-        </div>
-        <div class="col">
-          <input type="text" class="form-control" name="unit[]" placeholder="Jednostka" required>
-        </div>
-        <div class="col-auto">
-          <button type="button" class="btn btn-danger remove-ingredient">Usuń</button>
-        </div>
-      `;
-          document.getElementById("ingredients").appendChild(ingredientDiv);
-        });
+        
 
-      document.addEventListener("click", function (event) {
-        if (event.target.classList.contains("remove-ingredient")) {
-          event.target.closest(".row").remove();
-        }
-      });
 
-      window.onload = function () {
-        let form = document.querySelector("form");
-        if (form) {
-          form.reset();
-        }
-
-        let inputs = document.querySelectorAll("input, textarea, select");
-        inputs.forEach(input => {
-          if (input.type !== "submit" && input.type !== "file") {
-            input.value = "";
-          }
-        });
-
-        console.log("✅ Formularz został zresetowany po odświeżeniu.");
-      };
-
-      document.querySelector("form").addEventListener("submit", function (event) {
-        event.preventDefault();
-        setTimeout(() => {
-          alert("✅ Przepis został dodany!");
-          this.submit();
-        }, 100);
-      });
-
-    </script>
+      <%});%>
+</div>
+    
     <%- include('../partials/footer') %>
+  </div>
   </body>
 </html>
+<script>
+  document
+    .getElementById("add-recipe-btn")
+    .addEventListener("click", function () {
+      let form = document.getElementById("recipeForm");
+      if (form.style.display === "none") {
+        form.style.display = "block";
+      } else {
+        form.style.display = "none";
+      }
+    });
+
+  document
+    .getElementById("addIngredient")
+    .addEventListener("click", function () {
+      let ingredientDiv = document.createElement("div");
+      ingredientDiv.classList.add("row", "mb-2");
+      ingredientDiv.innerHTML = `
+    <div class="col">
+      <input type="text" class="form-control" name="ingredient_name[]" placeholder="Nazwa składnika" required>
+    </div>
+    <div class="col">
+      <input type="number" step="0.01" class="form-control" name="quantity[]" placeholder="Ilość" required>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" name="unit[]" placeholder="Jednostka" required>
+    </div>
+    <div class="col-auto">
+      <button type="button" class="btn btn-danger remove-ingredient">Usuń</button>
+    </div>
+  `;
+      document.getElementById("ingredients").appendChild(ingredientDiv);
+    });
+
+  document.addEventListener("click", function (event) {
+    if (event.target.classList.contains("remove-ingredient")) {
+      event.target.closest(".row").remove();
+    }
+  });
+
+  window.onload = function () {
+    let form = document.querySelector("form");
+    if (form) {
+      form.reset();
+    }
+
+    let inputs = document.querySelectorAll("input, textarea, select");
+    inputs.forEach(input => {
+      if (input.type !== "submit" && input.type !== "file") {
+        input.value = "";
+      }
+    });
+
+    console.log("✅ Formularz został zresetowany po odświeżeniu.");
+  };
+
+  document.querySelector("form").addEventListener("submit", function (event) {
+    event.preventDefault();
+    setTimeout(() => {
+      alert("✅ Przepis został dodany!");
+      this.submit();
+    }, 100);
+  });
+
+</script>

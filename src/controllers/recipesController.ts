@@ -1,16 +1,24 @@
 import { client } from "../db";
 import  { Request, Response,  } from "express";
 
-export const getRecipes = async () =>{
-    try {
-        const recipes = await client.query("SELECT * FROM RECIPES");
-    return recipes.rows;
-    }
-    catch(err){
-        console.log(err);
-        return;
-    }
-}
+export const getRecipes = async () => {
+  try {
+      const recipes = await client.query(`
+          SELECT RECIPES.recipe_id, RECIPES.description, RECIPES.instruction, 
+                 RECIPES.meal, RECIPES.bulk_cut, PHOTOS.photo
+          FROM RECIPES
+          LEFT JOIN PHOTOS ON RECIPES.recipe_id = PHOTOS.recipe_id
+      `);
+      console.log("✅ Recipes fetched from DB:", recipes.rows); // Debug
+      return recipes.rows;
+  }
+  catch (err) {
+      console.error("❌ Error fetching recipes:", err);
+      return [];
+  }
+};
+
+
 
 export const getRandomPhotos = async ( numberOfPhotos: number) => {
   try{
@@ -193,5 +201,6 @@ export const getRecipesPage= async (req: Request, res: Response) => {
         const recipes = await getRecipes();
         // recipes, bedzie zabierac duzo pamieci(wszystkie kolumny) ^^
         const diets = await getDiets();
+        console.log(recipes);
         res.render("pages/recipes", {recipes: recipes, diets:diets});
     }
