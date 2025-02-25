@@ -134,8 +134,8 @@
             </datalist>
           </div>
 
-          <h4 style="margin-bottom: -15px;">Zdjęcie</h4>
-          <div>
+          <h4 style="margin-bottom: -15px; text-align: center;">Zdjęcie</h4>
+          <div style="display: flex; flex-direction: column; align-items: center;">
             <div>
               <label for="imageInput" class="form-label"></label>
               <input
@@ -147,12 +147,9 @@
                 required
               />
             </div>
-            <div class="mb-3 d-flex justify-content-center">
-              <img
-                id="imagePreview"
-                class="img-thumbnail d-none"
-                style="max-width: 100%; max-height: 300px; object-fit: contain"
-              />
+              <p id="filePath" style="text-align: center; margin-top: 10px;"></p>
+            <div id="imageContainer" style="display: none; margin-top: 10px; align-items: center; justify-content: center;">
+              <img id="imagePreview" style="height: 300px; border: 2px solid #ccc; border-radius: 8px; padding: 5px;" />
             </div>
           </div>
 
@@ -298,4 +295,22 @@
     }, 100);
   });
 
+// Podgląd zdjęcia
+  document.getElementById("imageInput").addEventListener("change", function (event) {
+    const file = event.target.files[0];
+
+    if (file) {
+      document.getElementById("filePath").textContent = `Wybrano: ${file.name}`;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const preview = document.getElementById("imagePreview");
+        const container = document.getElementById("imageContainer");
+
+        preview.src = e.target.result;
+        container.style.display = "flex"; 
+      };
+      reader.readAsDataURL(file);
+    }
+  });
 </script>
