@@ -241,12 +241,14 @@
         console.log("✅ Formularz został zresetowany po odświeżeniu.");
       };
 
-      document.querySelector("form").addEventListener("submit", function () {
+      document.querySelector("form").addEventListener("submit", function (event) {
+        event.preventDefault();
         setTimeout(() => {
-          this.reset(); 
-          console.log("✅ Formularz został zresetowany po dodaniu przepisu.");
-        }, 100); 
+          alert("✅ Przepis został dodany!");
+          this.submit();
+        }, 100);
       });
+
     </script>
     <%- include('../partials/footer') %>
   </body>

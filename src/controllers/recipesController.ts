@@ -168,12 +168,14 @@ export const addRecipe = async (req: Request, res: Response) => {
         }
       }
       await client.query("COMMIT");
-  
-      res.status(201).json({
-        message: "Recipe, calories, ingredients, and image added successfully",
-        recipe_id: recipeId,
-        photo_id: photoId,
-      });
+      
+      //przekierowanie po skonczeniu na recipes w przyszlosci na ten przepis
+      res.redirect("/recipes");
+      // res.status(201).json({
+      //   message: "Recipe, calories, ingredients, and image added successfully",
+      //   recipe_id: recipeId,
+      //   photo_id: photoId,
+      // });
     } catch (err) {
       await client.query("ROLLBACK");
       console.error("❌ Error adding recipe:", err);
