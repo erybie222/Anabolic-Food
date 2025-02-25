@@ -103,6 +103,17 @@
               <option value="false">Redukcja</option>
             </select>
           </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="diet">Dieta</label>
+            <input list="diet-options" id="diet" type="text" name="diet" class="form-control" required>
+            <datalist id="diet-options">
+              <% diets.forEach(diet => { %>
+                  <option value="<%= diet.diet_name %>"></option>
+              <% }); %>
+            </datalist>
+          </div>
+
           <h4>Zdjęcie</h4>
           <div class="border p-4 rounded shadow">
             <div class="mb-3">

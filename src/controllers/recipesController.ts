@@ -134,7 +134,39 @@ export const addRecipe = async (req: Request, res: Response) => {
           res.status(500).json({ error: "Błąd serwera" });
         }
       }
-  
+      const diet = req.body.diet;
+      if (diet.length > 0){
+        try {
+          const result = await client.query(`
+            INSERT INTO DIETS (diet_name)
+            VALUES ($1)
+            ON CONFLICT (diet_name) DO NOTHING
+            RETURNING diet_id`,
+            [diet]
+          );         
+          let dietId = result.rows[0]?.diet_id || null;
+      
+          if(dietId == null){
+            const existingResult = await client.query(
+              "SELECT diet_id FROM DIETS WHERE diet_name = $1",
+              [diet]
+            );
+            dietId=existingResult.rows[0]?.diet_id || null;
+            if(dietId == null){
+              console.error(`❌ Błąd: Nie znaleziono ID diety dla: ${diet}`);
+              throw new Error(`❌ Brak diety w bazie: ${diet}`);
+            }
+          }
+          await client.query(
+            "INSERT INTO DIET_RECIPES (recipe_id, diet_id) VALUES ($1, $2)",
+            [recipeId,dietId],
+          );
+
+        } catch (error) {
+          console.error("❌ Błąd główny podczas dodawania diet:", error);
+          res.status(500).json({ error: "Błąd serwera" });
+        }
+      }
       await client.query("COMMIT");
   
       res.status(201).json({
