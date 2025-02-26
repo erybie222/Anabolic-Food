@@ -11,17 +11,34 @@
     crossorigin="anonymous"
   ></script>
 </head>
-<%- include('../../partials/header') %>
-<div class="container text-white">
-  <h2>MAMY TWÓJ WYNIK!</h2>
-  <p>
-    Jesteś <b><%= userData.gender === "male" ? "Mężczyzną" : "Kobietą" %></b> o
-    wadze <b><%= userData.weight %>kg</b>, wzroście
-    <b><%= userData.height %>cm</b> i masz <b><%= userData.age %> lat</b>. Przy
-    wybranej aktywności, kaloryczność Twojej diety wynosi
-    <b><%= calories %> kcal</b>.
-  </p>
 
-  <a href="/step1">OBLICZ PONOWNIE</a>
+<%- include('../../partials/header') %>
+
+<div class="container d-flex align-items-center justify-content-center vh-100">
+  <div
+    class="card text-white bg-gradient bg-dark shadow-lg p-4"
+    style="max-width: 600px; width: 100%"
+  >
+    <div class="card-body text-center">
+      <h2 class="text-uppercase fw-bold text-success mb-4">Mamy Twój Wynik!</h2>
+
+      <p class="fs-5">
+        Jesteś
+        <b><%= userData.gender === "male" ? "Mężczyzną" : "Kobietą" %></b> o
+        wadze <b><%= userData.weight %>kg</b>, wzroście
+        <b><%= userData.height %>cm</b> i masz <b><%= userData.age %> lat</b>.
+      </p>
+
+      <p class="fs-4 fw-bold text-warning">
+        Przy wybranej aktywności, kaloryczność Twojej diety wynosi
+        <b><%= calories %> kcal</b>.
+      </p>
+
+      <a href="/calculator/step-one" class="btn btn-lg btn-primary fw-bold mt-3"
+        >Oblicz Ponownie</a
+      >
+    </div>
+  </div>
 </div>
+
 <%- include('../../partials/footer') %>
