@@ -1,5 +1,11 @@
 import * as express from "express";
+import "express-session";
 
+declare module 'express-session' {
+  interface Session {
+    userData?: { [key: string]: any }; // Dostosuj typ zgodnie z potrzebami
+  }
+}
 declare global {
   namespace Express {
     interface User {

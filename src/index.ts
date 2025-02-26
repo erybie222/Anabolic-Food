@@ -24,7 +24,7 @@ app.use(cookieParser());
 app.use(session({
   secret: "SECRETWORD",
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   store: new (MemoryStore(session))({ checkPeriod: 86400000 }), // 🔥 Zapisywanie sesji
   cookie: { secure: false, httpOnly: true }
 }));
