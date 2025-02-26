@@ -5,11 +5,12 @@ export const getRecipes = async () => {
   try {
       const recipes = await client.query(`
           SELECT RECIPES.recipe_id, RECIPES.description, RECIPES.instruction, 
-                 RECIPES.meal, RECIPES.bulk_cut, PHOTOS.photo
+                 RECIPES.meal,  RECIPES.making_time,  RECIPES.bulk_cut, PHOTOS.photo, USERS.username
           FROM RECIPES
           LEFT JOIN PHOTOS ON RECIPES.recipe_id = PHOTOS.recipe_id
+          LEFT JOIN USERS on USERS.user_id = RECIPES.user_id
       `);
-      //console.log("✅ Recipes fetched from DB:", recipes.rows); // Debug
+      console.log("✅ Recipes fetched from DB:", recipes.rows); // Debug
       return recipes.rows;
   }
   catch (err) {
