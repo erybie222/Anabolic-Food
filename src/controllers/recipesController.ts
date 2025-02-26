@@ -198,10 +198,18 @@ export const addRecipe = async (req: Request, res: Response) : Promise<void> => 
     }
   }
 
-export const getRecipesPage= async (req: Request, res: Response) => {
+export const getRecipesPage = async (req: Request, res: Response) => {
         const recipes = await getRecipes();
         // recipes, bedzie zabierac duzo pamieci(wszystkie kolumny) ^^
         const diets = await getDiets();
         // console.log(recipes);
         res.render("pages/recipes", {recipes: recipes, diets:diets});
     }
+
+export const showRecipePage = async (req: Request, res: Response) => {
+  const recipes = await getRecipes();
+  // recipes, bedzie zabierac duzo pamieci(wszystkie kolumny) ^^
+  //const diets = await getDiets();
+  // console.log(recipes);
+  res.render("pages/single_recipe", {recipes: recipes});
+}
