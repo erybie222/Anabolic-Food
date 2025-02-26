@@ -21,11 +21,15 @@ export const getRecipes = async () => {
 
 
 
-export const getRandomPhotos = async ( numberOfPhotos: number) => {
+export const getRandomPhotosRecipeIdTitle = async ( numberOfPhotos: number) => {
   try{
-         const randomPhotos = await client.query(
-        "SELECT photo, recipe_id FROM  PHOTOS ORDER BY random() LIMIT $1",
-        [numberOfPhotos]
+         const randomPhotos = await client.query(`
+        SELECT p.photo, p.recipe_id, r.description
+        FROM PHOTOS p
+        JOIN RECIPES r ON p.recipe_id = r.recipe_id
+        ORDER BY random()
+        LIMIT $1;
+        `,[numberOfPhotos]
       );
       return randomPhotos.rows;
    }

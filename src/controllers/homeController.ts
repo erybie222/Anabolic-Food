@@ -1,23 +1,15 @@
 import { Request, Response } from "express";
-import { getRandomPhotos, getTitles } from "./recipesController";
+import { getRandomPhotosRecipeIdTitle, getTitles } from "./recipesController";
 
 
 export const renderHomePage =  async(req: Request, res: Response) => {
-    const carouselRandomPhotos = await getRandomPhotos(3);
-    const componentRandomPhotos = await getRandomPhotos(6);
-    const recipeIds = componentRandomPhotos ? componentRandomPhotos.map(photo => photo.recipe_id) : [];
-    const componentTitles = await getTitles(recipeIds);
-    const titlesMap = componentTitles ? new Map(componentTitles.map(title => [title.recipe_id, title.description])) : new Map();
-    const photosWithTitles = componentRandomPhotos ? componentRandomPhotos.map(photo => ({
-      photo: photo.photo,
-      recipe_id: photo.recipe_id,
-      title: titlesMap.get(photo.recipe_id) || "Brak tytułu"
-    })) : [];
+    const carouselRandomPhotos = await getRandomPhotosRecipeIdTitle(3);
+    const componentRandomPhotos = await getRandomPhotosRecipeIdTitle(6);
    // console.log("🚀 componentPhotosUrl:", componentRandomPhotos);
    //console.log("🚀 carouselPhotosUrl:", carouselRandomPhotos);
 
 
-    res.render("index", {carouselPhotosUrl: carouselRandomPhotos, photosWithTitles: photosWithTitles});
+    res.render("index", {carouselPhotos: carouselRandomPhotos, ComponentPhotos: componentRandomPhotos});
 }
 
 

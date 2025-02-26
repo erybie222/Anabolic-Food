@@ -17,13 +17,16 @@
     <title>Document</title>
   </head>
   <body data-bs-theme="dark">
-    <%-include('partials/header') %> <%- include('partials/carousel') %>
+    <%-include('partials/header') %>
+    <%- include('partials/carousel') %>
     <% for (let i = 0; i < 3; i++) { %>
       <%- include('partials/photos', { 
-        photo1: photosWithTitles[i * 2]?.photo || null, 
-        photo2: photosWithTitles[i * 2 + 1]?.photo || null,
-        title1: photosWithTitles[i * 2]?.title || "Brak tytułu", 
-        title2: photosWithTitles[i * 2 + 1]?.title || "Brak tytułu"
+        photo1: ComponentPhotos[i * 2]?.photo || null, 
+        photo2: ComponentPhotos[i * 2 + 1]?.photo || null,
+        title1: ComponentPhotos[i * 2]?.description || "Brak tytułu", 
+        title2: ComponentPhotos[i * 2 + 1]?.description || "Brak tytułu",
+        recipe_id1: ComponentPhotos[i * 2]?.recipe_id || null, 
+        recipe_id2: ComponentPhotos[i * 2 + 1]?.recipe_id || null
       }) %>
     <% } %>
     
