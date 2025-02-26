@@ -37,6 +37,20 @@ export const getRandomPhotos = async ( numberOfPhotos: number) => {
 
  }
 
+ export const getPhotoWithId = async ( recipeId: number) => {
+  try{
+        const photo = await client.query(
+        "SELECT photo FROM PHOTOS WHERE recipe_id =$1",
+        [recipeId]
+      );
+      return photo.rows.length > 0 ? photo.rows[0] : null;
+   }
+  catch (err) {
+    console.error("❌ Błąd podczas pobierania zdjęcia:", err);
+    return null;
+  }
+ }
+
  export const getDiets = async () => {
      try {
          const diet_names = await client.query("SELECT diet_name FROM DIETS");
@@ -209,8 +223,14 @@ export const getRecipesPage = async (req: Request, res: Response) => {
 
 export const showRecipePage = async (req: Request, res: Response) => {
   const recipes = await getRecipes();
+  const recipePhoto = await getPhotoWithId(1);
+
+  if (!recipePhoto || recipePhoto.length === 0) {
+    console.warn("⚠️ Brak zdjęcia do wyświetlenia w showRecipePage.");
+  }
+
   // recipes, bedzie zabierac duzo pamieci(wszystkie kolumny) ^^
   //const diets = await getDiets();
   // console.log(recipes);
-  res.render("pages/single_recipe", {recipes: recipes});
+  res.render("pages/single_recipe", {recipes: recipes, recipePhoto: recipePhoto});
 }

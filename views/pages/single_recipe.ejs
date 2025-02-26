@@ -20,8 +20,26 @@
     <div class="container h-100">
       <%- include('../partials/header') %>
       
-      <!-- PUSTA PRZESTRZEŃ -->
-
+      <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto text-center">
+          <% if (recipePhoto) { %>
+            <img
+              src="<%= recipePhoto.photo %>"
+              alt="Could not load image!"
+              style="
+                /* max-width: 100%; */
+                height: 500px;
+                display: block;
+                border-radius: 10px;
+              "
+            />
+          <% } else { %>
+            <p style="color: white; text-align: center;">Brak zdjęcia do wyświetlenia</p>
+          <% } %>
+        </div>
+      </div>
+      
+    
       <%- include('../partials/footer') %>
     </div>
   </body>
