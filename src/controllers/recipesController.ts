@@ -10,7 +10,7 @@ export const getRecipes = async () => {
           LEFT JOIN PHOTOS ON RECIPES.recipe_id = PHOTOS.recipe_id
           LEFT JOIN USERS on USERS.user_id = RECIPES.user_id
       `);
-      console.log("✅ Recipes fetched from DB:", recipes.rows); // Debug
+      //console.log("✅ Recipes fetched from DB:", recipes.rows); // Debug
       return recipes.rows;
   }
   catch (err) {
@@ -199,10 +199,18 @@ export const addRecipe = async (req: Request, res: Response) : Promise<void> => 
     }
   }
 
-export const getRecipesPage= async (req: Request, res: Response) => {
+export const getRecipesPage = async (req: Request, res: Response) => {
         const recipes = await getRecipes();
         // recipes, bedzie zabierac duzo pamieci(wszystkie kolumny) ^^
         const diets = await getDiets();
         // console.log(recipes);
         res.render("pages/recipes", {recipes: recipes, diets:diets});
     }
+
+export const showRecipePage = async (req: Request, res: Response) => {
+  const recipes = await getRecipes();
+  // recipes, bedzie zabierac duzo pamieci(wszystkie kolumny) ^^
+  //const diets = await getDiets();
+  // console.log(recipes);
+  res.render("pages/single_recipe", {recipes: recipes});
+}
