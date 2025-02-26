@@ -19,6 +19,7 @@
         <input
         type="search"
         class="form-control form-control-sm w-150"
+        id="add-search-field"
         placeholder="Search..."
         aria-label="Search"
       />
@@ -79,8 +80,17 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const addRecipeButton = document.getElementById("add-recipe-btn");
+    const addSearchField = document.getElementById("add-search-field");
+
     if (addRecipeButton && !window.location.pathname.startsWith("/recipes")) {
-      addRecipeButton.classList.add("d-none");
+     // addRecipeButton.classList.add("d-none");
+      addRecipeButton.classList.add("invisible"); // Ukrywa, ale nie usuwa
+    }
+    if (window.location.pathname.startsWith("/recipes/show_recipe")) {
+      addRecipeButton.classList.add("invisible"); // Ukrywa, ale nie usuwa
+      addSearchField.classList.add("invisible"); // Ukrywa, ale nie usuwa
+      // addRecipeButton.classList.add("d-none");
+      // addSearchField.classList.add("d-none");
     }
   });
 </script>
