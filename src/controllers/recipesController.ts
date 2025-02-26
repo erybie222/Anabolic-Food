@@ -51,6 +51,78 @@ export const getRandomPhotos = async ( numberOfPhotos: number) => {
   }
  }
 
+ export const getRecipeById = async (recipeId: number) => {
+  try {
+    // Pobranie podstawowych informacji o przepisie
+    const recipeResult = await client.query(`
+      SELECT 
+        recipe_id, 
+        description, 
+        instruction, 
+        meal,  
+        making_time,  
+        bulk_cut, 
+        user_id
+      FROM RECIPES
+      WHERE recipe_id = $1
+    `, [recipeId]);
+
+    if (recipeResult.rows.length === 0) {
+      console.warn(`⚠️ Przepis o ID ${recipeId} nie został znaleziony.`);
+      return null;
+    }
+    const recipe = recipeResult.rows[0];
+
+    // Pobranie zdjęcia przepisu
+    const photoResult = await client.query(`
+      SELECT photo FROM PHOTOS WHERE recipe_id = $1
+    `, [recipeId]);
+    const photo = photoResult.rows.length > 0 ? photoResult.rows[0].photo : null;
+
+    // Pobranie składników dla danego przepisu
+    const ingredientsResult = await client.query(`
+      SELECT 
+        INGREDIENTS.ingredient_name, 
+        RECIPES_INGREDIENTS.quantity, 
+        RECIPES_INGREDIENTS.unit
+      FROM RECIPES_INGREDIENTS
+      JOIN INGREDIENTS ON RECIPES_INGREDIENTS.ingredient_id = INGREDIENTS.ingredient_id
+      WHERE RECIPES_INGREDIENTS.recipe_id = $1
+    `, [recipeId]);
+    const ingredients = ingredientsResult.rows;
+
+    // Pobranie diety przypisanej do przepisu
+    const dietResult = await client.query(`
+      SELECT DIETS.diet_name 
+      FROM DIET_RECIPES
+      JOIN DIETS ON DIET_RECIPES.diet_id = DIETS.diet_id
+      WHERE DIET_RECIPES.recipe_id = $1
+    `, [recipeId]);
+    const diet = dietResult.rows.length > 0 ? dietResult.rows[0].diet_name : null;
+
+    // Pobranie wartości kalorycznych
+    const caloriesResult = await client.query(`
+      SELECT calories, proteins, fats, carbs 
+      FROM CALORIES
+      WHERE recipe_id = $1
+    `, [recipeId]);
+    const calories = caloriesResult.rows.length > 0 ? caloriesResult.rows[0] : null;
+
+    return {
+      recipe,
+      photo,
+      ingredients,
+      diet,
+      calories
+    };
+
+  } catch (err) {
+    console.error("❌ Błąd podczas pobierania przepisu:", err);
+    return null;
+  }
+};
+
+
  export const getDiets = async () => {
      try {
          const diet_names = await client.query("SELECT diet_name FROM DIETS");
@@ -221,16 +293,26 @@ export const getRecipesPage = async (req: Request, res: Response) => {
         res.render("pages/recipes", {recipes: recipes, diets:diets});
     }
 
-export const showRecipePage = async (req: Request, res: Response) => {
-  const recipes = await getRecipes();
-  const recipePhoto = await getPhotoWithId(1);
-
-  if (!recipePhoto || recipePhoto.length === 0) {
-    console.warn("⚠️ Brak zdjęcia do wyświetlenia w showRecipePage.");
+export const showRecipePage = async (req: Request, res: Response): Promise<void> => {
+  const recipeId=Number(req.params.id);
+  if (isNaN(recipeId) || !Number.isInteger(recipeId)) {
+   // console.error("❌ Błąd: Nieprawidłowy `recipeId`:", req.params.id); --- nie da sie uruchomić zdjęcia
+    res.status(400).send("❌ Błąd: ID przepisu musi być liczbą całkowitą.");
+    return;
   }
 
-  // recipes, bedzie zabierac duzo pamieci(wszystkie kolumny) ^^
-  //const diets = await getDiets();
-  // console.log(recipes);
-  res.render("pages/single_recipe", {recipes: recipes, recipePhoto: recipePhoto});
+  const recipeData = await getRecipeById(recipeId);
+
+  if (!recipeData) {
+    res.status(404).send("❌ Błąd: Przepis nie został znaleziony.");
+    return;
+  }
+
+  res.render("pages/single_recipe", { 
+    recipe: recipeData.recipe,
+    photo: recipeData.photo,
+    ingredients: recipeData.ingredients,
+    diet: recipeData.diet,
+    calories: recipeData.calories
+  });
 }

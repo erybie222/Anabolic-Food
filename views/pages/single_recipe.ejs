@@ -19,25 +19,55 @@
   <body data-bs-theme="dark">
     <div class="container h-100">
       <%- include('../partials/header') %>
-      
+
+      <h1 style="margin-top: -30px;" class="text-center"><%=recipe.description%></h1>
+      <h6 style="margin-bottom: -40px;" class="text-center">Czas przygotowania: <%=recipe.making_time%> minut</h6>
       <div class="row py-lg-5">
-        <div class="col-lg-6 col-md-8 mx-auto text-center">
-          <% if (recipePhoto) { %>
+        <div class="d-flex justify-content-center">
+          <% if (photo) { %>
             <img
-              src="<%= recipePhoto.photo %>"
-              alt="Could not load image!"
+              src="<%= photo %>"
+              alt="Nie można wyświetlić zdjęcia!"
               style="
-                /* max-width: 100%; */
                 height: 500px;
                 display: block;
-                border-radius: 10px;
-              "
+                border-radius: 10px;"
             />
           <% } else { %>
-            <p style="color: white; text-align: center;">Brak zdjęcia do wyświetlenia</p>
+            <p style="color: white; text-align: center;">Brak zdjęcia w bazie danych</p>
           <% } %>
         </div>
       </div>
+      
+      <h1 style="margin-top: -30px;" class="text-center">Składniki</h1>
+      <div style="margin-top: 0px;" class="d-flex justify-content-center">
+        <table class="table table-dark table-borderless text-center" style="width: 65%; margin-top: 8px;">
+            <thead>
+              <tr>
+                <th scope="col" class="px-2 py-1">#</th>
+                <th scope="col" class="px-2 py-1">Nazwa składnika</th>
+                <th scope="col" class="px-2 py-1">Ilość</th>
+                <th scope="col" class="px-2 py-1">Jednostka</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% ingredients.forEach((ingredient, index) => { %>
+                <tr>
+                  <th scope="row" class="px-2 py-1"><%= index + 1 %></th>
+                  <td class="px-2 py-1"><%= ingredient.ingredient_name %></td>
+                  <td class="px-2 py-1"><%= ingredient.quantity %></td>
+                  <td class="px-2 py-1"><%= ingredient.unit %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+      </div>
+
+      <h1 style="margin-top: -30px;" class="text-center">Instrukcje</h1>
+      <div class="text-center bg-dark text-light p-3 rounded" style="width: 65%; margin-top: -15px;">
+        <p style="font-size: 18px"><%= recipe.instruction %></p>
+      </div>
+      
       
     
       <%- include('../partials/footer') %>

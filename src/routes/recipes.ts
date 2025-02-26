@@ -6,6 +6,6 @@ const router = Router();
 
 router.get("/", getRecipesPage);
 router.post("/add_recipe", isAuthenticated, addRecipe);
-router.get("/show_recipe",showRecipePage);
+router.get("/show_recipe/:id", showRecipePage);
 
 export default router;
