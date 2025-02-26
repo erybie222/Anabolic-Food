@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { connectDB, client } from "./db";
 import recipesRoutes from "./routes/recipes";
 import  authRoutes  from "./routes/auth";
+import calculatorRoutes from "./routes/calculator";
 import homeRoutes from "./routes/home";
 import session from "express-session";
 import passport from "./controllers/passport";
@@ -23,7 +24,7 @@ app.use(cookieParser());
 app.use(session({
   secret: "SECRETWORD",
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   store: new (MemoryStore(session))({ checkPeriod: 86400000 }), // 🔥 Zapisywanie sesji
   cookie: { secure: false, httpOnly: true }
 }));
@@ -47,6 +48,7 @@ app.use((req, res, next) => {
 app.use("/", homeRoutes);
 app.use("/recipes", recipesRoutes);
 app.use("/auth", authRoutes);
+app.use("/calculator", calculatorRoutes);
 
 app.use((req, res, next) => {
   // console.log("🔎 Cookies:", req.cookies);
