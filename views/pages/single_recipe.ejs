@@ -21,7 +21,12 @@
       <%- include('../partials/header') %>
 
       <h1 style="margin-top: -30px;" class="text-center"><%=recipe.description%></h1>
-      <h6 style="margin-bottom: -40px;" class="text-center">Czas przygotowania: <%=recipe.making_time%> minut</h6>
+      <div style="margin-bottom: -50px;" class="d-flex justify-content-center align-items-center gap-3">
+        <h6 class="text-center">⏳ Czas przygotowania: <%= recipe.making_time %> minut</h6>
+        <% if (diet) { %>
+          <h6 class="text-center">🥗 Dieta: <%= diet %></h6>
+        <% } %>
+      </div>
       <div class="row py-lg-5">
         <div class="d-flex justify-content-center">
           <% if (photo) { %>
@@ -38,8 +43,8 @@
           <% } %>
         </div>
       </div>
-      
-      <h1 style="margin-top: -30px;" class="text-center">Składniki</h1>
+
+      <h1 style="margin-top: -50px;" class="text-center">Składniki</h1>
       <div style="margin-top: 0px;" class="d-flex justify-content-center">
         <table class="table table-dark table-borderless text-center" style="width: 65%; margin-top: 8px;">
             <thead>
@@ -63,13 +68,33 @@
           </table>
       </div>
 
-      <h1 style="margin-top: -30px;" class="text-center">Instrukcje</h1>
-      <div class="text-center bg-dark text-light p-3 rounded" style="width: 65%; margin-top: -15px;">
+      <h1 class="text-center">Instrukcje</h1>
+      <div class="text-center bg-dark text-light p-3 rounded" style="width: 65%; margin-top: -20px;">
         <p style="font-size: 18px"><%= recipe.instruction %></p>
       </div>
-      
-      
-    
+      <h1 class="text-center">Kalorie</h1>
+
+      <div class="d-flex justify-content-center mt-2">
+        <table class="table table-sm table-dark table-bordered text-center" style="width: 60%; font-size: 14px; table-layout: fixed;">
+          <thead>
+            <tr>
+              <th scope="col" class="py-1 px-2" style="width: 25%;">Kalorie</th>
+              <th scope="col" class="py-1 px-2" style="width: 25%;">Białka</th>
+              <th scope="col" class="py-1 px-2" style="width: 25%;">Tłuszcze</th>
+              <th scope="col" class="py-1 px-2" style="width: 25%;">Węglowodany</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="py-1 px-2"><%= calories.calories %></td>
+              <td class="py-1 px-2"><%= calories.proteins %></td>
+              <td class="py-1 px-2"><%= calories.fats %></td>
+              <td class="py-1 px-2"><%= calories.carbs %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+       
       <%- include('../partials/footer') %>
     </div>
   </body>
