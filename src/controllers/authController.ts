@@ -10,16 +10,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     
     const {email , password} = req.body;
-    //  console.log(email, password);
-     if(!email || !password)
-     {
-        res.status(400).json({ error: "All fields are required" });
-        return;
-    }
-     const result = await client.query("SELECT * FROM USERS WHERE email = $1", [email]);
+    
+    const result = await client.query("SELECT * FROM USERS WHERE email = $1", [email]);
     if(result.rows.length === 0 )
     {
-     res.status(404).json({error: "User not found"});
+     res.status(404).json({error: "Podany zły email"});
      return;
     }
     const user = result.rows[0];
@@ -27,7 +22,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     
    const isMatch = await bcrypt.compare(password, storedPassword);
    if (!isMatch) {
-     res.status(401).json({ error: "Incorrect password" });
+     res.status(401).json({ error: "Nieprawidłowe hasło" });
     return;
   }
   req.logIn(user, (err) => {

@@ -14,7 +14,7 @@
 
 <%- include('../partials/header') %>
 <body data-bs-theme="dark">
-  <form class="w-50 mx-auto" action="/auth/login" method="POST">
+  <form id="loginForm" class="w-50 mx-auto" action="/auth/login" method="POST" novalidate>
     <img class="mb-4" src="logo.gif" alt="" width="72" height="57" />
     <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
@@ -28,7 +28,9 @@
         required
       />
       <label for="floatingInput">Email address</label>
+      <div class="invalid-feedback">Podaj poprawny adres e-mail.</div>
     </div>
+
     <div class="form-floating">
       <input
         name="password"
@@ -39,6 +41,7 @@
         required
       />
       <label for="floatingPassword">Password</label>
+      <div class="invalid-feedback">Hasło jest wymagane.</div>
     </div>
 
     <div class="form-check text-start my-3">
@@ -55,6 +58,62 @@
     <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
     <p class="mt-5 mb-3 text-body-secondary">© 2017–2024</p>
   </form>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.getElementById("loginForm");
+      const emailInput = document.getElementById("floatingInput");
+      const passwordInput = document.getElementById("floatingPassword");
+
+      emailInput.value = "";
+      passwordInput.value = "";
+
+      form.addEventListener("submit", function (event) {
+        let isValid = true;
+
+        // Regex, który akceptuje `email@email` oraz `email@email.com`
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+$/;
+        if (!emailRegex.test(emailInput.value.trim())) {
+          emailInput.classList.add("is-invalid");
+          emailInput.classList.remove("is-valid");
+          isValid = false;
+        } else {
+          emailInput.classList.remove("is-invalid");
+          emailInput.classList.add("is-valid");
+        }
+
+        // Sprawdzamy czy hasło nie jest puste
+        if (passwordInput.value.trim() === "") {
+          passwordInput.classList.add("is-invalid");
+          passwordInput.classList.remove("is-valid");
+          isValid = false;
+        } else {
+          passwordInput.classList.remove("is-invalid");
+          passwordInput.classList.add("is-valid");
+        }
+
+        // Jeśli są błędy, zatrzymujemy wysyłanie formularza
+        if (!isValid) {
+          event.preventDefault();
+        }
+      });
+
+      // Usuwanie błędu podczas wpisywania poprawnych danych
+      emailInput.addEventListener("input", function () {
+        if (emailRegex.test(emailInput.value.trim())) {
+          emailInput.classList.remove("is-invalid");
+          emailInput.classList.add("is-valid");
+        }
+      });
+
+      passwordInput.addEventListener("input", function () {
+        if (passwordInput.value.trim() !== "") {
+          passwordInput.classList.remove("is-invalid");
+          passwordInput.classList.add("is-valid");
+        }
+      });
+    });
+  </script>
 </body>
 
 <%- include('../partials/footer') %>
