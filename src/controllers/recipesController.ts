@@ -352,6 +352,8 @@ export const searchRecipes = async (query:string) => {
 }
 
 export const editRecipePage = async (req: Request, res: Response): Promise<void> => {
+  const diets = await getDiets();
+  const recipes = await getRecipes();
   const userId = req.user?.user_id;
   const recipeId=Number(req.params.id);
   const recipeData = await getRecipeById(recipeId);
@@ -373,14 +375,29 @@ export const editRecipePage = async (req: Request, res: Response): Promise<void>
     res.status(401).json({ error: "Unauthorized. Please log in." });
     return;
   }
- 
+  const ingredientsResult = await client.query(`
+    SELECT 
+      INGREDIENTS.ingredient_name, 
+      RECIPES_INGREDIENTS.quantity, 
+      RECIPES_INGREDIENTS.unit
+    FROM RECIPES_INGREDIENTS
+    JOIN INGREDIENTS ON RECIPES_INGREDIENTS.ingredient_id = INGREDIENTS.ingredient_id
+    WHERE RECIPES_INGREDIENTS.recipe_id = $1
+  `, [recipeId]);
+  
+  const ingredients = ingredientsResult.rows || []; // 🔥 Zawsze zwracaj tablicę
+ // console.log("🛠️ Debug recipeData:", recipeData);
+  //console.log("✅ Składniki w editRecipePage:", recipeData.ingredients);
 
-    res.render("pages/single_recipe", { 
-      recipe: recipeData.recipe,
-      photo: recipeData.photo,
-      ingredients: recipeData.ingredients,
-      diet: recipeData.diet,
-      calories: recipeData.calories
+
+    res.render("pages/edit_recipe", { 
+      recipe: recipeData.recipe || {},
+      photo: recipeData.photo || null,
+      ingredients: recipeData.ingredients || [],
+      diet: recipeData.diet || null,
+      calories: recipeData.calories || null,
+      diets:diets,
+      recipes:recipes
     });
   } catch(err){
     console.log(err);
