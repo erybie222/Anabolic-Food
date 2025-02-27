@@ -196,7 +196,7 @@
             <button type="button" class="btn btn-secondary" id="addIngredient">
               Dodaj Składnik
             </button>
-            <button type="submit" class="btn btn-primary">Dodaj Przepis</button>
+            <button type="submit" class="btn btn-primary" id="add">Dodaj Przepis</button>
           </div>
         </form>
       </div>
@@ -290,13 +290,30 @@
     // console.log("✅ Formularz został zresetowany po odświeżeniu.");
   };
 
-  document.querySelector("form").addEventListener("submit", function (event) {
-    event.preventDefault();
-    setTimeout(() => {
-      alert("✅ Przepis został dodany!");
-      this.submit();
-    }, 100);
-  });
+  document.addEventListener("DOMContentLoaded", function () {
+  const addRecipeForm = document.querySelector("form[action='/recipes/add_recipe']");
+  const searchForm = document.querySelector("form[action='/recipes']");
+
+  if (addRecipeForm) {
+    addRecipeForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      setTimeout(() => {
+        alert("✅ Przepis został dodany!");
+        this.submit();
+      }, 100);
+    });
+  }
+
+  if (searchForm) {
+    searchForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      const query = this.querySelector("input[name='q']").value.trim();
+      if (!query) return;
+      window.location.href = `/recipes?q=${encodeURIComponent(query)}`;
+    });
+  }
+});
+
 
 // Podgląd zdjęcia
   document.getElementById("imageInput").addEventListener("change", function (event) {

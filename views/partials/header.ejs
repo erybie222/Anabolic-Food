@@ -1,79 +1,60 @@
 <div class="container" data-bs-theme="dark">
-  <header
-    class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom"
-  >
-   
-    <div class="d-flex align-items-center gap-2">
-      
+  <header class="row align-items-center py-3 mb-4 border-bottom">
+    
+    <!-- Lewa sekcja: Logo + Dodaj Przepis + SearchBar -->
+    <div class="col-lg-4 col-md-5 col-12 d-flex align-items-center gap-2">
       <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
-        <svg
-          class="bi"
-          width="40"
-          height="32"
-          role="img"
-          aria-label="Bootstrap"
-        >
+        <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap">
           <use xlink:href="#bootstrap"></use>
         </svg>
       </a>
-        <input
-        type="search"
-        class="form-control form-control-sm w-150"
-        id="add-search-field"
-        placeholder="Search..."
-        aria-label="Search"
-      />
-      
-      
-      <button type="button" class="btn btn-success btn-sm w-auto" id="add-recipe-btn" style="min-width: 110px;">
+
+      <button type="button" class="btn btn-success btn-sm flex-shrink-0" id="add-recipe-btn">
         Dodaj przepis
       </button>
-    </div>
-    
-    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-      <li>
-        <a href="/" class="nav-link px-2 link-secondary text-light"
-          >Strona główna</a
-        >
-      </li>
-      <li><a href="/recipes" class="nav-link px-2 text-light">Przepisy</a></li>
-      <li><a href="/about" class="nav-link px-2 text-light">O nas</a></li>
-      <li><a href="/calculator/step-one" class="nav-link px-2 text-light">Kalkulator</a></li>
-    </ul>
 
-    <div class="col-md-3 text-end d-flex align-items-center gap-2">
-      
-     
-
-      
-      <%if(user){ %>
-      <svg xmlns="http://www.w3.org/2000/svg" width="50" height="40" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
-        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
-      </svg><%=user.username%>
-      <button 
-        type="button"
-        class="btn btn-danger btn-sm "
-        onclick="window.location.href='/auth/logout'"
-      >
-         Wyloguj się
-      </button>
-        <%} else{%>
-          <button
-        type="button"
-        class="btn btn-outline-primary btn-sm"
-        onclick="window.location.href='/login'"
-      >
-        Zaloguj się
-      </button>
-      <button
-        type="button"
-        class="btn btn-primary btn-sm"
-        onclick="window.location.href='/register'"
-      >
-        Zarejestruj się
-      </button>
-        <%}%>
+      <form action="/recipes" method="GET" class="flex-grow-1">
+        <input 
+          type="search" 
+          name="q" 
+          class="form-control form-control-sm" 
+          id="add-search-field"
+          placeholder="Szukaj przepisu..." 
+          aria-label="Search"
+        />
+      </form>
     </div>
+
+    <!-- Środkowa sekcja: Nawigacja -->
+    <div class="col-lg-4 col-md-2 d-none d-md-flex justify-content-center">
+      <ul class="nav">
+        <li><a href="/" class="nav-link px-2 text-light">Strona główna</a></li>
+        <li><a href="/recipes" class="nav-link px-2 text-light">Przepisy</a></li>
+        <li><a href="/about" class="nav-link px-2 text-light">O nas</a></li>
+        <li><a href="/calculator/step-one" class="nav-link px-2 text-light">Kalkulator</a></li>
+      </ul>
+    </div>
+
+    <!-- Prawa sekcja: Logowanie -->
+    <div class="col-lg-4 col-md-5 col-12 d-flex align-items-center justify-content-end gap-2">
+      <% if(user) { %>
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+        </svg>
+        <span class="ms-2 text-light"><%= user.username %></span>
+        <button type="button" class="btn btn-danger btn-sm" onclick="window.location.href='/auth/logout'">
+          Wyloguj się
+        </button>
+      <% } else { %>
+        <button type="button" class="btn btn-outline-primary btn-sm" onclick="window.location.href='/login'">
+          Zaloguj się
+        </button>
+        <button type="button" class="btn btn-primary btn-sm ms-2" onclick="window.location.href='/register'">
+          Zarejestruj się
+        </button>
+      <% } %>
+    </div>
+
   </header>
 </div>
 
@@ -83,14 +64,11 @@
     const addSearchField = document.getElementById("add-search-field");
 
     if (addRecipeButton && !window.location.pathname.startsWith("/recipes")) {
-     // addRecipeButton.classList.add("d-none");
-      addRecipeButton.classList.add("invisible"); // Ukrywa, ale nie usuwa
+      addRecipeButton.classList.add("invisible");
     }
     if (window.location.pathname.startsWith("/recipes/show_recipe")) {
-      addRecipeButton.classList.add("invisible"); // Ukrywa, ale nie usuwa
-      addSearchField.classList.add("invisible"); // Ukrywa, ale nie usuwa
-      // addRecipeButton.classList.add("d-none");
-      // addSearchField.classList.add("d-none");
+      addRecipeButton.classList.add("invisible");
+      addSearchField.classList.add("invisible");
     }
   });
 </script>

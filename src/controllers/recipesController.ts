@@ -291,11 +291,20 @@ export const addRecipe = async (req: Request, res: Response) : Promise<void> => 
   }
 
 export const getRecipesPage = async (req: Request, res: Response) => {
-        const recipes = await getRecipes();
+  const query = req.query.q as string;
+  let recipes;
+  if (query)
+  {
+    recipes = await searchRecipes(query);
+  }
+  else {
+    recipes = await getRecipes();
+  }
+        
         // recipes, bedzie zabierac duzo pamieci(wszystkie kolumny) ^^
         const diets = await getDiets();
         // console.log(recipes);
-        res.render("pages/recipes", {recipes: recipes, diets:diets});
+        res.render("pages/recipes", {recipes: recipes, diets:diets, query:query});
     }
 
 export const showRecipePage = async (req: Request, res: Response): Promise<void> => {
@@ -321,3 +330,25 @@ export const showRecipePage = async (req: Request, res: Response): Promise<void>
     calories: recipeData.calories
   });
 }
+
+
+
+export const searchRecipes = async (query:string) => {
+  try{
+    const results = await client.query(
+      `SELECT RECIPES.recipe_id, RECIPES.description, RECIPES.instruction, 
+                 RECIPES.meal,  RECIPES.making_time,  RECIPES.bulk_cut, PHOTOS.photo, USERS.username
+          FROM RECIPES
+          LEFT JOIN PHOTOS ON RECIPES.recipe_id = PHOTOS.recipe_id
+          LEFT JOIN USERS on USERS.user_id = RECIPES.user_id
+          WHERE LOWER(RECIPES.description) LIKE LOWER($1)`,
+          [`%${query}%`] 
+      );
+      return results.rows;
+  } catch(err) {
+    console.log(err);
+    return [];
+  }
+}
+
+
