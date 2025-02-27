@@ -7,12 +7,12 @@ router.get("/", renderHomePage);
 router.get("/contact", renderStaticPage("contact"));
 router.get("/about", (req, res) => {
     if(req.isAuthenticated()){
-        renderStaticPage("secret");
+      return renderStaticPage("secret")(req, res);
     }
     else{
-  renderStaticPage("about" )
+      return renderStaticPage("about")(req, res);
     }
-   });
+});
 router.get("/login", renderStaticPage("login"));
 router.get("/register", renderStaticPage("register"));
 
