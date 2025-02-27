@@ -351,4 +351,41 @@ export const searchRecipes = async (query:string) => {
   }
 }
 
+export const editRecipePage = async (req: Request, res: Response): Promise<void> => {
+  const userId = req.user?.user_id;
+  const recipeId=Number(req.params.id);
+  const recipeData = await getRecipeById(recipeId);
+  let checkUser = await client.query("SELECT user_id FROM RECIPES WHERE recipe_id = $1", [recipeId]);
+  checkUser = checkUser.rows[0].user_id;
+  if(!recipeData)
+  {
+    res.status(404).send("❌ Błąd: Przepis nie został znaleziony.");
+    return;
+  }
+  if (!userId) {
+    res.status(401).json({ error: "Unauthorized. Please log in." });
+    return;
+  }
+  try{
+   
+  if(Number(userId) !== Number(checkUser))
+  {
+    res.status(401).json({ error: "Unauthorized. Please log in." });
+    return;
+  }
+ 
+
+    res.render("pages/single_recipe", { 
+      recipe: recipeData.recipe,
+      photo: recipeData.photo,
+      ingredients: recipeData.ingredients,
+      diet: recipeData.diet,
+      calories: recipeData.calories
+    });
+  } catch(err){
+    console.log(err);
+  }
+  
+  
+}
 
