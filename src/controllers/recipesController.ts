@@ -20,7 +20,24 @@ export const getRecipes = async () => {
   }
 };
 
-
+export const getRecipeswithUserId = async (userId :number) => {
+  try {
+      const recipes = await client.query(`
+          SELECT RECIPES.recipe_id, RECIPES.description, RECIPES.instruction, 
+                 RECIPES.meal,  RECIPES.making_time,  RECIPES.bulk_cut, PHOTOS.photo, USERS.username
+          FROM RECIPES
+          LEFT JOIN PHOTOS ON RECIPES.recipe_id = PHOTOS.recipe_id
+          LEFT JOIN USERS on USERS.user_id = RECIPES.user_id
+          WHERE RECIPES.user_id = $1
+      `, [userId]);
+      //console.log("✅ Recipes fetched from DB:", recipes.rows); // Debug
+      return recipes.rows;
+  }
+  catch (err) {
+      console.error("❌ Error fetching recipes:", err);
+      return [];
+  }
+};
 
 export const getRandomPhotosRecipeIdTitle = async ( numberOfPhotos: number) => {
   try{
@@ -331,8 +348,6 @@ export const showRecipePage = async (req: Request, res: Response): Promise<void>
   });
 }
 
-
-
 export const searchRecipes = async (query:string) => {
   try{
     const results = await client.query(
@@ -351,4 +366,10 @@ export const searchRecipes = async (query:string) => {
   }
 }
 
+export const showMyRecipes = async (req: Request, res: Response): Promise<void> => {
+    const userId = Number(req.user?.user_id);
 
+    let recipes = await getRecipeswithUserId(userId);
+
+    res.render("pages/my_recipes", {recipes});
+}
