@@ -42,7 +42,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         return res.status(500).json({ error: "Session save failed" });
       }
       // console.log("✅ Session saved successfully:", req.session);
-      res.status(200).json({ message: "Login successful", user });
+      res.redirect("/");
     });
   });
 } catch (err) {
@@ -87,17 +87,26 @@ export const register =  async (req: Request, res: Response): Promise<void> => {
       [email, username, hashedPassword],
     );
     await client.query("COMMIT");
-    res.status(201).json({
-      message: "New user added successfully",
-      userId: userResult.rows[0].user_id,
+
+    const user = userResult.rows[0]; // Pobierz nowo utworzonego użytkownika
+
+    // Automatyczne logowanie użytkownika
+    req.logIn(user, (err) => {
+      if (err) {
+        console.error("❌ Login error:", err);
+        return res.status(500).json({ error: "Login failed after registration" });
+      }
+
+      req.session.save((err) => {
+        if (err) {
+          console.error("❌ Session save error:", err);
+          return res.status(500).json({ error: "Session save failed after registration" });
+        }
+        res.redirect("/"); // Użytkownik jest już zalogowany i przekierowany na stronę główną
+      });
     });
-    return;
-    
-  
-   
-    }
-  
-  catch(err) {
+
+    } catch(err) {
     if(transactionStarted)
     {
       await client.query("ROLLBACK")
