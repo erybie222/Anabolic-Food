@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edytuj Przepis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body data-bs-theme="dark">
+    <div class="container mt-5">
+        <h2 class="text-center">Edytuj Przepis</h2>
+        <form action="/recipes/edit_recipe/<%= recipe.recipe_id %>" method="POST">
+            <input type="hidden" name="_method" value="PATCH">
+
+            <h4>Nazwa przepisu</h4>
+            <div class="mb-3">
+                <input type="text" class="form-control" name="description" value="<%= recipe.description %>" required>
+            </div>
+
+            <h4>Instrukcja</h4>
+            <div class="mb-3">
+                <textarea class="form-control" name="instruction" rows="3" required><%= recipe.instruction %></textarea>
+            </div>
+
+            <h4>Posiłek</h4>
+            <div class="mb-3">
+                <select class="form-select" name="meal" required>
+                    <option value="Śniadanie" <%= recipe.meal === "Śniadanie" ? "selected" : "" %>>Śniadanie</option>
+                    <option value="Obiad" <%= recipe.meal === "Obiad" ? "selected" : "" %>>Obiad</option>
+                    <option value="Kolacja" <%= recipe.meal === "Kolacja" ? "selected" : "" %>>Kolacja</option>
+                    <option value="Deser" <%= recipe.meal === "Deser" ? "selected" : "" %>>Deser</option>
+                    <option value="Przekąska" <%= recipe.meal === "Przekąska" ? "selected" : "" %>>Przekąska</option>
+                </select>
+            </div>
+
+            <h4>Czas przygotowania (minuty)</h4>
+            <div class="mb-3">
+                <input type="number" step="1" class="form-control" name="making_time" value="<%= recipe.making_time %>" required>
+            </div>
+
+            <h4>Kalorie</h4>
+            <div class="mb-3">
+                <input type="number" step="1" class="form-control" name="calories" value="<%= calories.calories %>" required>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col">
+                    <input type="number" step="1" class="form-control" name="proteins" value="<%= calories.proteins %>" required>
+                </div>
+                <div class="col">
+                    <input type="number" step="1" class="form-control" name="fats" value="<%= recipe.calories %>" required>
+                </div>
+                <div class="col">
+                    <input type="number" step="1" class="form-control" name="carbs" value="<%= calories.carbs %>" required>
+                </div>
+            </div>
+
+            <h4>Masa czy Redukcja</h4>
+            <div class="mb-3">
+                <select class="form-select" name="bulk_cut" required>
+                    <option value="true" <%= recipe.bulk_cut ? "selected" : "" %>>Masa</option>
+                    <option value="false" <%= !recipe.bulk_cut ? "selected" : "" %>>Redukcja</option>
+                </select>
+            </div>
+
+            <h4>Dieta</h4>
+            <div class="mb-3">
+                <input list="diet-options" id="diet" type="text" name="diet" class="form-control" value="<%= diet %>" required>
+                <datalist id="diet-options">
+                    <% diets.forEach(diet => { %>
+                        <option value="<%= diet.diet_name %>"></option>
+                    <% }); %>
+                </datalist>
+            </div>
+
+            <h4>Zdjęcie</h4>
+            <div class="mb-3 text-center">
+                <img id="imagePreview" src="<%= recipe.photo %>" alt="Zdjęcie przepisu" height="200" class="border rounded">
+                <input class="form-control mt-3" type="file" id="imageInput" name="image" accept="image/*">
+            </div>
+
+            <h4>Składniki</h4>
+            <div id="ingredients">
+                <% ingredients.forEach((ingredient, index) => { %>
+                <div class="row mb-2 ingredient-row">
+                    <div class="col">
+                        <input type="text" class="form-control" name="ingredient_name[]" value="<%= ingredient.ingredient_name %>" required>
+                    </div>
+                    <div class="col">
+                        <input type="number" step="0.01" class="form-control" name="quantity[]" value="<%= ingredient.quantity %>" required>
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" name="unit[]" value="<%= ingredient.unit %>" required>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-danger remove-ingredient">Usuń</button>
+                    </div>
+                </div>
+                <% }); %>
+            </div>
+
+            <div class="d-flex justify-content-between mt-3">
+                <button type="button" class="btn btn-secondary" id="addIngredient">Dodaj Składnik</button>
+                <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("addIngredient").addEventListener("click", function () {
+            let ingredientDiv = document.createElement("div");
+            ingredientDiv.classList.add("row", "mb-2", "ingredient-row");
+            ingredientDiv.innerHTML = `
+                <div class="col">
+                    <input type="text" class="form-control" name="ingredient_name[]" placeholder="Nazwa składnika" required>
+                </div>
+                <div class="col">
+                    <input type="number" step="0.01" class="form-control" name="quantity[]" placeholder="Ilość" required>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" name="unit[]" placeholder="Jednostka" required>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-danger remove-ingredient">Usuń</button>
+                </div>
+            `;
+            document.getElementById("ingredients").appendChild(ingredientDiv);
+        });
+
+        document.addEventListener("click", function (event) {
+            if (event.target.classList.contains("remove-ingredient")) {
+                event.target.closest(".ingredient-row").remove();
+            }
+        });
+
+        document.getElementById("imageInput").addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById("imagePreview").src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
