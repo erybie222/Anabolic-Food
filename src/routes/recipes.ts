@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addRecipe, getRecipesPage,  showRecipePage, editRecipePage, updateRecipe } from "../controllers/recipesController";
+import { addRecipe, getRecipesPage,  showRecipePage, editRecipePage, updateRecipe , showMyRecipes} from "../controllers/recipesController";
 import { isAuthenticated } from "../middleware/authMiddleware";
 
 const router = Router();
