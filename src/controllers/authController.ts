@@ -14,16 +14,14 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const result = await client.query("SELECT * FROM USERS WHERE email = $1", [email]);
     if(result.rows.length === 0 )
     {
-     res.status(404).json({error: "Podany zły email"});
-     return;
+      return res.status(401).render("pages/login", { email_error: "Podany zły email" });
     }
     const user = result.rows[0];
     const storedPassword = user.password;
     
    const isMatch = await bcrypt.compare(password, storedPassword);
    if (!isMatch) {
-     res.status(401).json({ error: "Nieprawidłowe hasło" });
-    return;
+    return res.status(401).render("pages/login", { password_error: "Nieprawidłowe hasło" });
   }
   req.logIn(user, (err) => {
     if (err) {
