@@ -11,7 +11,7 @@
     <div class="container mt-5">
         <h2 class="text-center">Edytuj Przepis</h2>
         <form action="/recipes/edit_recipe/<%= recipe.recipe_id %>" method="POST">
-            <input type="hidden" name="recipe_id" value="<%= recipe.recipe_id %>">
+            <input type="hidden" name="_method" value="PATCH">
 
             <h4>Nazwa przepisu</h4>
             <div class="mb-3">
@@ -41,18 +41,18 @@
 
             <h4>Kalorie</h4>
             <div class="mb-3">
-                <input type="number" step="1" class="form-control" name="calories" value="<%= recipe.calories %>" required>
+                <input type="number" step="1" class="form-control" name="calories" value="<%= calories.calories %>" required>
             </div>
 
             <div class="row mb-2">
                 <div class="col">
-                    <input type="number" step="1" class="form-control" name="proteins" value="<%= recipe.proteins %>" required>
+                    <input type="number" step="1" class="form-control" name="proteins" value="<%= calories.proteins %>" required>
                 </div>
                 <div class="col">
-                    <input type="number" step="1" class="form-control" name="fats" value="<%= recipe.fats %>" required>
+                    <input type="number" step="1" class="form-control" name="fats" value="<%= recipe.calories %>" required>
                 </div>
                 <div class="col">
-                    <input type="number" step="1" class="form-control" name="carbs" value="<%= recipe.carbs %>" required>
+                    <input type="number" step="1" class="form-control" name="carbs" value="<%= calories.carbs %>" required>
                 </div>
             </div>
 
@@ -66,7 +66,7 @@
 
             <h4>Dieta</h4>
             <div class="mb-3">
-                <input list="diet-options" id="diet" type="text" name="diet" class="form-control" value="<%= recipe.diet %>" required>
+                <input list="diet-options" id="diet" type="text" name="diet" class="form-control" value="<%= diet %>" required>
                 <datalist id="diet-options">
                     <% diets.forEach(diet => { %>
                         <option value="<%= diet.diet_name %>"></option>
@@ -85,7 +85,7 @@
                 <% ingredients.forEach((ingredient, index) => { %>
                 <div class="row mb-2 ingredient-row">
                     <div class="col">
-                        <input type="text" class="form-control" name="ingredient_name[]" value="<%= ingredient.name %>" required>
+                        <input type="text" class="form-control" name="ingredient_name[]" value="<%= ingredient.ingredient_name %>" required>
                     </div>
                     <div class="col">
                         <input type="number" step="0.01" class="form-control" name="quantity[]" value="<%= ingredient.quantity %>" required>

@@ -2,6 +2,7 @@ import { client } from "../db";
 import  { Request, Response,  } from "express";
 
 
+
 export const getRecipes = async () => {
   try {
       const recipes = await client.query(`
@@ -406,3 +407,179 @@ export const editRecipePage = async (req: Request, res: Response): Promise<void>
   
 }
 
+export const updateRecipe = async (req: Request, res: Response): Promise<void> => {
+
+  const id = Number(req.params.id);
+  const { description, instruction, meal, making_time, calories, proteins, fats, carbs, bulk_cut, diet, photo} = req.body;
+  const making_time_int = Number(making_time);
+  const calories_int = Number(calories);
+  const proteins_int = Number(proteins);
+  const fats_int = Number(fats);
+  const carbs_int = Number(carbs);
+  const bulk_cut_boolean = bulk_cut === "true" || bulk_cut === true; 
+
+
+  try {
+    await client.query("BEGIN");
+    const recipesResult = await client.query(`UPDATE RECIPES SET
+      description = $1, instruction = $2, meal = $3, making_time = $4,
+      bulk_cut = $5
+      WHERE recipe_id = $6
+      RETURNING *`, [description, instruction, meal,  making_time_int,bulk_cut_boolean, id]);
+    
+      if(recipesResult.rows.length === 0)
+      {
+        await client.query("ROLLBACK");
+        res.status(404).send("❌ Przepis nie został znaleziony");
+        return;
+      }
+     
+      const caloriesResult = await client.query(`UPDATE CALORIES SET calories = $1 ,
+         proteins = $2 , fats = $3 , carbs = $4
+          WHERE recipe_id = $5
+          RETURNING *
+         `, [calories_int, proteins_int, fats_int ,carbs_int, id]);
+         console.log(caloriesResult.rows[0]);
+
+         if (caloriesResult.rowCount === 0) {
+          await client.query("ROLLBACK");
+          res.status(404).send("❌ Nie znaleziono danych kalorycznych.");
+          return;
+      }
+      //console.log("✅ Zaktualizowano kalorie:", caloriesResult.rows[0]);
+
+      if(photo)
+      {
+         const photosResult = await client.query(`UPDATE PHOTOS SET photo = $1 WHERE recipe_id = $2
+        RETURNING *`, [photo , id]);
+        //console.log("✅ Zaktualizowano zdjęcie:", photosResult.rows[0]);
+      }
+      if (photo) {
+        const photosResult = await client.query(
+            `UPDATE PHOTOS SET photo = $1 WHERE recipe_id = $2 RETURNING *`,
+            [photo, id]
+        );
+        
+        if (photosResult.rowCount === 0) {
+            console.warn("⚠️ Brak zdjęcia do aktualizacji w tabeli PHOTOS dla recipe_id =", id);
+        } else {
+            //console.log("✅ Zaktualizowano zdjęcie:", photosResult.rows[0]);
+        }
+    }
+    
+
+    
+      const ingredientResult = await updateRecipeIngredients(id, req);
+
+        if(diet)
+        {
+          const dietResult = await updateRecipeDiet(id, diet);
+        }
+        await client.query("COMMIT"); 
+      res.redirect("/");
+  }
+  catch(error){
+    res.status(500).json({ message: "Nie udało się zaktualizować przepisu", error });
+  }
+
+}
+
+export const updateRecipeIngredients = async (recipeId: number, req: Request) => {
+  try {
+
+      await client.query("DELETE FROM RECIPES_INGREDIENTS WHERE recipe_id = $1", [recipeId]);
+
+
+      const ingredientNames = req.body.ingredient_name || [];
+      const quantities = req.body.quantity || [];
+      const units = req.body.unit || [];
+
+      if (ingredientNames.length === 0) {
+          console.warn(`⚠️ Brak składników do aktualizacji dla przepisu ${recipeId}`);
+          return;
+      }
+
+      for (let i = 0; i < ingredientNames.length; i++) {
+          const ingredient = ingredientNames[i] || "";
+          const quantity = quantities[i] || "0"; 
+          const unit = units[i] || ""; 
+
+
+          let ingredientResult = await client.query(`
+              INSERT INTO INGREDIENTS (ingredient_name) 
+              VALUES ($1) 
+              ON CONFLICT (ingredient_name) DO NOTHING 
+              RETURNING ingredient_id`,
+              [ingredient]
+          );
+
+          let ingredientId = ingredientResult.rows[0]?.ingredient_id || null;
+
+
+          if (!ingredientId) {
+              const existingIngredient = await client.query(
+                  "SELECT ingredient_id FROM INGREDIENTS WHERE ingredient_name = $1",
+                  [ingredient]
+              );
+              ingredientId = existingIngredient.rows[0]?.ingredient_id || null;
+          }
+
+
+          if (!ingredientId) {
+              throw new Error(`❌ Błąd: Nie znaleziono składnika '${ingredient}' w bazie.`);
+          }
+
+          await client.query(
+              "INSERT INTO RECIPES_INGREDIENTS (recipe_id, ingredient_id, quantity, unit) VALUES ($1, $2, $3, $4)",
+              [recipeId, ingredientId, quantity, unit]
+          );
+      }
+
+      //console.log(`✅ Składniki dla przepisu ${recipeId} zostały zaktualizowane.`);
+  } catch (error) {
+      console.error("❌ Błąd podczas aktualizacji składników:", error);
+      throw error;
+  }
+};
+
+
+export const updateRecipeDiet = async (recipeId: number, diet: string) => {
+  try {
+
+      await client.query("DELETE FROM DIET_RECIPES WHERE recipe_id = $1", [recipeId]);
+
+
+      let result = await client.query(
+          `INSERT INTO DIETS (diet_name) 
+           VALUES ($1) 
+           ON CONFLICT (diet_name) DO NOTHING 
+           RETURNING diet_id`,
+          [diet]
+      );
+
+      let dietId = result.rows[0]?.diet_id || null;
+
+      if (!dietId) {
+          const existingDiet = await client.query(
+              "SELECT diet_id FROM DIETS WHERE diet_name = $1",
+              [diet]
+          );
+          dietId = existingDiet.rows[0]?.diet_id || null;
+      }
+
+      
+      if (!dietId) {
+          throw new Error(`❌ Błąd: Nie znaleziono diety '${diet}' w bazie.`);
+      }
+
+      await client.query(
+          "INSERT INTO DIET_RECIPES (recipe_id, diet_id) VALUES ($1, $2)",
+          [recipeId, dietId]
+      );
+
+      //console.log(`✅ Dieta '${diet}' została zaktualizowana dla przepisu ${recipeId}.`);
+  } catch (error) {
+      console.error("❌ Błąd podczas aktualizacji diety:", error);
+      throw error;
+  }
+};

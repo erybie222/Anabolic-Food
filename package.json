@@ -20,6 +20,7 @@
   "homepage": "https://github.com/erybie222/Anabolic-Food#readme",
   "dependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/method-override": "^3.0.0",
     "@types/passport": "^1.0.17",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
@@ -30,6 +31,7 @@
     "express": "^4.21.2",
     "express-session": "^1.18.1",
     "memorystore": "^1.6.7",
+    "method-override": "^3.0.0",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "pg": "^8.13.3"

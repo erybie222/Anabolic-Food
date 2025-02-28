@@ -11,7 +11,7 @@ import session from "express-session";
 import passport from "./controllers/passport";
 import cookieParser from "cookie-parser";
 import MemoryStore from "memorystore";
-
+import methodOverride from "method-override";
 
 
 
@@ -49,7 +49,7 @@ app.use("/", homeRoutes);
 app.use("/recipes", recipesRoutes);
 app.use("/auth", authRoutes);
 app.use("/calculator", calculatorRoutes);
-
+app.use(methodOverride("_method"));
 app.use((req, res, next) => {
   // console.log("🔎 Cookies:", req.cookies);
   // console.log("🔎 Session ID:", req.sessionID);
