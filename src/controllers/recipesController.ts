@@ -605,3 +605,32 @@ export const updateRecipeDiet = async (recipeId: number, diet: string) => {
       throw error;
   }
 };
+
+export const deleteRecipe = async (req: Request, res: Response): Promise<void> => {
+  const id = Number(req.params.id);
+
+  try {
+    await client.query("BEGIN")
+
+    await client.query("DELETE FROM RECIPES_INGREDIENTS WHERE recipe_id = $1", [id]);
+    await client.query("DELETE FROM DIET_RECIPES WHERE recipe_id = $1", [id]);
+    await client.query("DELETE FROM PHOTOS WHERE recipe_id = $1", [id]);
+    await client.query("DELETE FROM CALORIES WHERE recipe_id = $1", [id]);
+
+   
+    const result = await client.query("DELETE FROM RECIPES WHERE recipe_id = $1 RETURNING *", [id]);
+
+    if (result.rowCount === 0) {
+      await client.query("ROLLBACK");
+      res.status(404).json({ message: "❌ Przepis nie został znaleziony." });
+      return;
+  }
+  await client.query("COMMIT");
+  res.status(200).json({ message: "✅ Przepis został usunięty.", deletedRecipe: result.rows[0] });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("❌ Błąd podczas usuwania przepisu:", error);
+    res.status(500).json({ message: "❌ Wystąpił błąd serwera." });
+}
+
+};
