@@ -84,4 +84,10 @@
       addSearchField.classList.add("invisible");
     }
   });
+  document.getElementById("add-recipe-btn").addEventListener("click", function () {
+    if (window.location.pathname.startsWith("/recipes/my_recipes")) {
+      sessionStorage.setItem("showFormOnce", "true"); // Ustaw flagę
+      window.location.href = "/recipes";
+    }
+  });
 </script>
