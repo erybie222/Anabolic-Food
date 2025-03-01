@@ -159,10 +159,10 @@
         return;
       }
     
-      console.log("✅ Formularz znaleziony, dodawanie event listenera...");
+      //console.log("✅ Formularz znaleziony, dodawanie event listenera...");
     
       form.addEventListener("submit", async function (event) {
-        event.preventDefault(); // ❌ Zapobiega domyślnemu przeładowaniu strony
+        event.preventDefault(); 
     
         console.log("✅ Wysłanie oceny - przechwycenie eventu");
     
@@ -181,11 +181,11 @@
           }
     
           const result = await response.json();
-          console.log("✅ Odpowiedź serwera:", result); // Debugowanie
+          //console.log("✅ Odpowiedź serwera:", result); 
     
           if (result.reload) {
             console.log("🔄 Przeładowanie strony...");
-            window.location.reload(); // 🔄 Odświeżenie strony
+            window.location.reload(); 
           }
         } catch (err) {
           console.error("❌ Błąd podczas wysyłania oceny:", err);
