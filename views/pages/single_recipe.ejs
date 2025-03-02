@@ -73,7 +73,7 @@
         </div>
       </div>
 
-      <h2 style="margin-top: -50px;" class="text-center">Składniki</h2>
+      <h2 style="margin-top: -50px;" class="text-center mt-5">Składniki</h2>
       <div style="margin-top: 0px;" class="d-flex justify-content-center">
         <table class="table table-dark table-borderless text-center" style="width: 65%; margin-top: 8px;">
             <thead>
@@ -97,11 +97,11 @@
           </table>
       </div>
 
-      <h2 class="text-center">Instrukcje</h2>
+      <h2 class="text-center mt-5">Instrukcje</h2>
         <div class="bg-dark text-light p-3 rounded mx-auto text-center" style="max-width: 65%; width: 100%; margin-top: -20px;">
             <p style="font-size: 18px;"><%= recipe.instruction %></p>
         </div>
-      <h2 class="text-center">Kalorie</h2>
+      <h2 class="text-center mt-5">Kalorie</h2>
 
       <div class="d-flex justify-content-center mt-2">
         <table class="table table-sm table-dark table-bordered text-center" style="width: 60%; font-size: 14px; table-layout: fixed;">
@@ -124,14 +124,35 @@
         </table>
       </div>
 
+        <h2 class="text-center mt-5">Oceny użytkowników</h2>
+      <table class="table table-dark text-center mt-5">
+        <thead>
+          <tr>
+            <th>Użytkownik</th>
+            <th>Ocena</th>
+            <th>Opinia</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (ratings && ratings.length > 0) { %>
+            <% ratings.forEach((rating) => { %>
+              <tr>
+                <td><%= rating.username %></td>
+                <td><%= "⭐".repeat(rating.rating) %></td>
+                <td><%= rating.comment %></td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <tr><td colspan="3">Brak ocen dla tego przepisu</td></tr>
+          <% } %>
+        </tbody>
+      </table>
+
+      
        <!-- Formularz dodawania opinii -->
-       <h3 class="text-center">Dodaj opinię</h3>
+       <h3 class="text-center mt-5">Dodaj opinię</h3>
        <div class="d-flex justify-content-center">
          <form action="/ratings/<%=recipe.recipe_id%>" method="POST" style="width: 50%;" class="bg-dark p-4 rounded" id="reviewForm">
-           <div class="mb-3">
-             <!-- <label for="username" class="form-label">Twoje imię</label> -->
-             <!-- <input type="text" class="form-control" id="username" name="username" required> -->
-           </div>
            <div class="mb-3 text-center">
              <label class="form-label">Ocena</label>
              <div class="star-rating">
@@ -151,6 +172,7 @@
        </div>
   </body>
   <script>
+    
     document.addEventListener("DOMContentLoaded", () => {
       const form = document.getElementById("reviewForm");
     

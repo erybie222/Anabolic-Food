@@ -2,6 +2,7 @@ import { Router } from "express";
 import { addRecipe, getRecipesPage,  showRecipePage, editRecipePage, updateRecipe , showMyRecipes ,deleteRecipe} from "../controllers/recipesController";
 import { isAuthenticated } from "../middleware/authMiddleware";
 
+
 const router = Router();
 
 router.get("/", getRecipesPage);

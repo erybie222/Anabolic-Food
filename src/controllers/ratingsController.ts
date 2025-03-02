@@ -24,7 +24,7 @@ export const rateRecipe = async (req: Request, res: Response): Promise<void> => 
       
       const responseData = { message: "Ocena dodana", reload: true };
 
-      console.log("✅ Odpowiedź do klienta:", responseData); // Debug
+      //console.log("✅ Odpowiedź do klienta:", responseData); // Debug
       res.status(201).json(responseData);
 
  
@@ -37,3 +37,12 @@ export const rateRecipe = async (req: Request, res: Response): Promise<void> => 
   
   
   }
+
+  export const getRatings = async (recipe_id: number) => {
+    const { rows } = await client.query(`SELECT RATINGS.rating, RATINGS.COMMENT, USERS.username
+      FROM RATINGS
+      JOIN USERS ON RATINGS.user_id = USERS.user_id
+      WHERE RATINGS.recipe_id = $1`, [recipe_id]);
+
+    return rows; 
+};
