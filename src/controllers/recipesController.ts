@@ -1,5 +1,6 @@
 import { client } from "../db";
 import  { Request, Response,  } from "express";
+import { getRatings } from "./ratingsController";
 
 
 
@@ -339,13 +340,15 @@ export const showRecipePage = async (req: Request, res: Response): Promise<void>
     res.status(404).send("❌ Błąd: Przepis nie został znaleziony.");
     return;
   }
+  const ratings = await getRatings(recipeId);
 
   res.render("pages/single_recipe", { 
     recipe: recipeData.recipe,
     photo: recipeData.photo,
     ingredients: recipeData.ingredients,
     diet: recipeData.diet,
-    calories: recipeData.calories
+    calories: recipeData.calories,
+    ratings: ratings
   });
 }
 
@@ -634,3 +637,5 @@ export const deleteRecipe = async (req: Request, res: Response): Promise<void> =
 }
 
 };
+
+

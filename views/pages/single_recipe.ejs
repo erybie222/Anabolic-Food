@@ -15,6 +15,35 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+    <style>
+.star-rating {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  gap: 5px;
+}
+.star-rating input {
+  display: none;
+}
+.star-rating label {
+  color: gray;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: gold;
+}
+.star-rating input:checked ~ label,
+.star-rating input:checked ~ label ~ label {
+  color: gold;
+}
+
+
+
+    </style>
   </head>
   <body data-bs-theme="dark">
     <div class="container h-100">
@@ -44,7 +73,7 @@
         </div>
       </div>
 
-      <h1 style="margin-top: -50px;" class="text-center">Składniki</h1>
+      <h2 style="margin-top: -50px;" class="text-center mt-5">Składniki</h2>
       <div style="margin-top: 0px;" class="d-flex justify-content-center">
         <table class="table table-dark table-borderless text-center" style="width: 65%; margin-top: 8px;">
             <thead>
@@ -68,11 +97,11 @@
           </table>
       </div>
 
-      <h1 class="text-center">Instrukcje</h1>
+      <h2 class="text-center mt-5">Instrukcje</h2>
         <div class="bg-dark text-light p-3 rounded mx-auto text-center" style="max-width: 65%; width: 100%; margin-top: -20px;">
             <p style="font-size: 18px;"><%= recipe.instruction %></p>
         </div>
-      <h1 class="text-center">Kalorie</h1>
+      <h2 class="text-center mt-5">Kalorie</h2>
 
       <div class="d-flex justify-content-center mt-2">
         <table class="table table-sm table-dark table-bordered text-center" style="width: 60%; font-size: 14px; table-layout: fixed;">
@@ -94,8 +123,101 @@
           </tbody>
         </table>
       </div>
-       
-      <%- include('../partials/footer') %>
-    </div>
+
+        <h2 class="text-center mt-5">Oceny użytkowników</h2>
+      <table class="table table-dark text-center mt-5">
+        <thead>
+          <tr>
+            <th>Użytkownik</th>
+            <th>Ocena</th>
+            <th>Opinia</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (ratings && ratings.length > 0) { %>
+            <% ratings.forEach((rating) => { %>
+              <tr>
+                <td><%= rating.username %></td>
+                <td><%= "⭐".repeat(rating.rating) %></td>
+                <td><%= rating.comment %></td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <tr><td colspan="3">Brak ocen dla tego przepisu</td></tr>
+          <% } %>
+        </tbody>
+      </table>
+
+      
+       <!-- Formularz dodawania opinii -->
+       <h3 class="text-center mt-5">Dodaj opinię</h3>
+       <div class="d-flex justify-content-center">
+         <form action="/ratings/<%=recipe.recipe_id%>" method="POST" style="width: 50%;" class="bg-dark p-4 rounded" id="reviewForm">
+           <div class="mb-3 text-center">
+             <label class="form-label">Ocena</label>
+             <div class="star-rating">
+              <% for (let i = 5; i >= 1; i--) { %>
+                <input type="radio" id="star<%= i %>" name="rating" value="<%= i %>" required>
+                <label for="star<%= i %>">&#9733;</label>
+              <% } %>
+            </div>
+            
+           </div>
+           <div class="mb-3">
+             <label for="comment" class="form-label">Opinia</label>
+             <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+           </div>
+           <button type="submit" class="btn btn-primary">Dodaj opinię</button>
+         </form>
+       </div>
   </body>
-</html>
+  <script>
+    
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("reviewForm");
+    
+      if (!form) {
+        console.error("❌ Formularz nie został znaleziony!");
+        return;
+      }
+    
+      //console.log("✅ Formularz znaleziony, dodawanie event listenera...");
+    
+      form.addEventListener("submit", async function (event) {
+        event.preventDefault(); 
+    
+        console.log("✅ Wysłanie oceny - przechwycenie eventu");
+    
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData);
+    
+        try {
+          const response = await fetch(this.action, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+    
+          if (!response.ok) {
+            throw new Error("Błąd HTTP " + response.status);
+          }
+    
+          const result = await response.json();
+          //console.log("✅ Odpowiedź serwera:", result); 
+    
+          if (result.reload) {
+            console.log("🔄 Przeładowanie strony...");
+            window.location.reload(); 
+          }
+        } catch (err) {
+          console.error("❌ Błąd podczas wysyłania oceny:", err);
+        }
+      });
+    });
+    </script>
+    
+  
+  
+  
+
+

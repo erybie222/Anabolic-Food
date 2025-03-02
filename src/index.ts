@@ -12,7 +12,7 @@ import passport from "./controllers/passport";
 import cookieParser from "cookie-parser";
 import MemoryStore from "memorystore";
 import methodOverride from "method-override";
-
+import ratingsRoutes from "./routes/ratings";
 
 
 dotenv.config();
@@ -49,6 +49,7 @@ app.use("/", homeRoutes);
 app.use("/recipes", recipesRoutes);
 app.use("/auth", authRoutes);
 app.use("/calculator", calculatorRoutes);
+app.use("/ratings", ratingsRoutes);
 app.use(methodOverride("_method"));
 app.use((req, res, next) => {
   // console.log("🔎 Cookies:", req.cookies);
