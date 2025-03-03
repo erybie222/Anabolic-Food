@@ -33,6 +33,7 @@
                 data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
             Home
         </button>
+        
         <div class="collapse show" id="home-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Overview</a></li>
@@ -42,10 +43,21 @@
         </div>
     </li>
     <li class="mb-1">
+      <div class="d-flex form-check form-switch" >
+        <span>Redukcja</span>
+        <input class="form-check-input mx-2" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+        <span>Masa</span>
+      </div>
+    </li>
+    <li class ="mb-1">
+      <label for="customRange2" class="form-label">Kalorie</label>
+<input type="range" class="form-range" min="0" max="5" id="customRange2">
+    </li>
+    <li class="mb-1">
         <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
                 data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
-            Dashboard
-        </button>
+              Składniki
+              </button>
         <div class="collapse" id="dashboard-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Overview</a></li>
@@ -58,7 +70,7 @@
     <li class="mb-1">
         <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
                 data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
-            Orders
+            Dieta
         </button>
         <div class="collapse" id="orders-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
