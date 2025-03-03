@@ -21,14 +21,14 @@
   </button>
 
 <!-- Sidebar Offcanvas -->
-<div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel" style="max-width: 250px;">
+<div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel" style="max-width: 300px;">
 <div class="offcanvas-header">
-<h5 class="offcanvas-title" id="sidebarLabel">Menu</h5>
+<h5 class="offcanvas-title" id="sidebarLabel">Filtry</h5>
 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 </div>
 <div class="offcanvas-body">
 <ul class="list-unstyled w-100">
-    <li class="mb-1">
+    <!-- <li class="mb-1">
         <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
                 data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
             Home
@@ -41,9 +41,9 @@
                 <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Reports</a></li>
             </ul>
         </div>
-    </li>
+    </li> -->
     <li class="mb-1">
-      <div class="d-flex form-check form-switch" >
+      <div class="d-flex form-check form-switch" style="margin-left: -40px;">
         <span>Redukcja</span>
         <input class="form-check-input mx-2" type="checkbox" role="switch" id="flexSwitchCheckDefault">
         <span>Masa</span>
@@ -78,21 +78,6 @@
                 <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Processed</a></li>
                 <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Shipped</a></li>
                 <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Returned</a></li>
-            </ul>
-        </div>
-    </li>
-    <li class="border-top my-3"></li>
-    <li class="mb-1">
-        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
-                data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
-            Account
-        </button>
-        <div class="collapse" id="account-collapse">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">New...</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Profile</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Settings</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Sign out</a></li>
             </ul>
         </div>
     </li>
@@ -176,8 +161,10 @@
     if (window.location.pathname.startsWith("/recipes/show_recipe")) {
       addRecipeButton.classList.add("invisible");
       addSearchField.classList.add("invisible");
+      addCategoryButton.classList.add("invisible");
     }
     if (window.location.pathname.startsWith("/login") || window.location.pathname.startsWith("/register")){
+      addSearchField.classList.add("invisible");
       addCategoryButton.remove();
     }
   });
