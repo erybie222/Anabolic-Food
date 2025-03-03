@@ -9,6 +9,86 @@
         </svg>
       </a>
 
+      
+  <button class="btn btn-outline-light btn-sm py-0 px-2 d-flex align-items-center"
+  id="add-categories-button"
+  type="button" 
+  data-bs-toggle="offcanvas" 
+  data-bs-target="#sidebar" 
+  aria-controls="sidebar" 
+  style="height: 31px;">
+    ☰Filtry
+  </button>
+
+<!-- Sidebar Offcanvas -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel" style="max-width: 250px;">
+<div class="offcanvas-header">
+<h5 class="offcanvas-title" id="sidebarLabel">Menu</h5>
+<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+<ul class="list-unstyled w-100">
+    <li class="mb-1">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
+                data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+            Home
+        </button>
+        <div class="collapse show" id="home-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Overview</a></li>
+                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Updates</a></li>
+                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Reports</a></li>
+            </ul>
+        </div>
+    </li>
+    <li class="mb-1">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
+                data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+            Dashboard
+        </button>
+        <div class="collapse" id="dashboard-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Overview</a></li>
+                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Weekly</a></li>
+                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Monthly</a></li>
+                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Annually</a></li>
+            </ul>
+        </div>
+    </li>
+    <li class="mb-1">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
+                data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+            Orders
+        </button>
+        <div class="collapse" id="orders-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">New</a></li>
+                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Processed</a></li>
+                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Shipped</a></li>
+                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Returned</a></li>
+            </ul>
+        </div>
+    </li>
+    <li class="border-top my-3"></li>
+    <li class="mb-1">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
+                data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+            Account
+        </button>
+        <div class="collapse" id="account-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">New...</a></li>
+                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Profile</a></li>
+                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Settings</a></li>
+                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Sign out</a></li>
+            </ul>
+        </div>
+    </li>
+</ul>
+</div>
+</div>
+
+
       <form action="/recipes" method="GET" class="flex-grow-1">
         <input 
           type="search" 
@@ -76,6 +156,7 @@
   document.addEventListener("DOMContentLoaded", function () {
     const addRecipeButton = document.getElementById("add-recipe-btn");
     const addSearchField = document.getElementById("add-search-field");
+    const addCategoryButton = document.getElementById("add-categories-button");
 
     if (addRecipeButton && !window.location.pathname.startsWith("/recipes")) {
       addRecipeButton.classList.add("invisible");
@@ -83,6 +164,9 @@
     if (window.location.pathname.startsWith("/recipes/show_recipe")) {
       addRecipeButton.classList.add("invisible");
       addSearchField.classList.add("invisible");
+    }
+    if (window.location.pathname.startsWith("/login") || window.location.pathname.startsWith("/register")){
+      addCategoryButton.remove();
     }
   });
   document.getElementById("add-recipe-btn").addEventListener("click", function () {
