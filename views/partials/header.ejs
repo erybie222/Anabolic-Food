@@ -11,13 +11,13 @@
 
       
   <button class="btn btn-outline-light btn-sm py-0 px-2 d-flex align-items-center"
-  id="add-categories-button"
+  id="filtersButton"
   type="button" 
   data-bs-toggle="offcanvas" 
   data-bs-target="#sidebar" 
   aria-controls="sidebar" 
   style="height: 31px;">
-    ☰Filtry
+    Filtry
   </button>
 
 <!-- Sidebar Offcanvas -->
@@ -28,22 +28,8 @@
 </div>
 <div class="offcanvas-body">
 <ul class="list-unstyled w-100">
-    <!-- <li class="mb-1">
-        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
-                data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
-            Home
-        </button>
-        
-        <div class="collapse show" id="home-collapse">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Overview</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Updates</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Reports</a></li>
-            </ul>
-        </div>
-    </li> -->
     <li class="mb-1">
-      <div class="d-flex form-check form-switch" style="margin-left: -40px;">
+      <div class="d-flex form-check form-switch" >
         <span>Redukcja</span>
         <input class="form-check-input mx-2" type="checkbox" role="switch" id="flexSwitchCheckDefault">
         <span>Masa</span>
@@ -54,33 +40,56 @@
 <input type="range" class="form-range" min="0" max="5" id="customRange2">
     </li>
     <li class="mb-1">
-        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
-                data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
-              Składniki
-              </button>
-        <div class="collapse" id="dashboard-collapse">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Overview</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Weekly</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Monthly</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Annually</a></li>
-            </ul>
-        </div>
-    </li>
+      <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
+              data-bs-toggle="collapse" data-bs-target="#ingredients-collapse" aria-expanded="false">
+          Składniki
+      </button>
+      <div class="collapse" id="ingredients-collapse">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <% if(typeof ingredients !== 'undefined'){ %>
+        <% ingredients.forEach(ingredient => { %>
+                  <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault<%=ingredient.ingredient_id%>">
+                    <label class="form-check-label" for="flexCheckDefault<%=ingredient.ingredient_id%>">
+                      
+                      <%= ingredient.ingredient_name %>
+                    </label>
+                  </div>
+                  </li>
+                <% }); %>
+        <% } %>
+        </ul>
+      </div>
+      
+      
+  </li>
     <li class="mb-1">
         <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
-                data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+                data-bs-toggle="collapse" data-bs-target="#diets-collapse" aria-expanded="false">
             Dieta
         </button>
-        <div class="collapse" id="orders-collapse">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">New</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Processed</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Shipped</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Returned</a></li>
-            </ul>
+        <div class="collapse" id="diets-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <% if(typeof diets !== 'undefined') { %>
+          <% diets.forEach(diet => { %>
+                    <li>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault<%=diet.id%>">
+                      <label class="form-check-label" for="flexCheckDefault<%=diet.id%>">
+                        <%= diet.diet_name %>
+                      </label>
+                    </div>
+                    </li>
+                  <% }); %>
+          <% } %>
+          </ul>
         </div>
+        
+        
     </li>
+    <li class="border-top my-3"></li>
+   
 </ul>
 </div>
 </div>
@@ -154,6 +163,11 @@
     const addRecipeButton = document.getElementById("add-recipe-btn");
     const addSearchField = document.getElementById("add-search-field");
     const addCategoryButton = document.getElementById("add-categories-button");
+    const filtersButton = document.getElementById("filtersButton");
+
+    if (!window.location.pathname.startsWith("/recipes")){
+      filtersButton.classList.add("invisible");;
+    }
 
     if (addRecipeButton && !window.location.pathname.startsWith("/recipes")) {
       addRecipeButton.classList.add("invisible");
@@ -174,4 +188,5 @@
       window.location.href = "/recipes";
     }
   });
+  
 </script>
