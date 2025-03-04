@@ -23,25 +23,11 @@
 <!-- Sidebar Offcanvas -->
 <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel" style="max-width: 250px;">
 <div class="offcanvas-header">
-<h5 class="offcanvas-title" id="sidebarLabel">Menu</h5>
+<h5 class="offcanvas-title" id="sidebarLabel">Filtry</h5>
 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 </div>
 <div class="offcanvas-body">
 <ul class="list-unstyled w-100">
-    <li class="mb-1">
-        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
-                data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
-            Home
-        </button>
-        
-        <div class="collapse show" id="home-collapse">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Overview</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Updates</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Reports</a></li>
-            </ul>
-        </div>
-    </li>
     <li class="mb-1">
       <div class="d-flex form-check form-switch" >
         <span>Redukcja</span>
@@ -65,6 +51,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault<%=ingredient.ingredient_id%>">
                     <label class="form-check-label" for="flexCheckDefault<%=ingredient.ingredient_id%>">
+                      
                       <%= ingredient.ingredient_name %>
                     </label>
                   </div>
@@ -98,20 +85,7 @@
         
     </li>
     <li class="border-top my-3"></li>
-    <li class="mb-1">
-        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
-                data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
-            Account
-        </button>
-        <div class="collapse" id="account-collapse">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">New...</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Profile</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Settings</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Sign out</a></li>
-            </ul>
-        </div>
-    </li>
+   
 </ul>
 </div>
 </div>
