@@ -54,32 +54,48 @@
 <input type="range" class="form-range" min="0" max="5" id="customRange2">
     </li>
     <li class="mb-1">
-        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
-                data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
-              Składniki
-              </button>
-        <div class="collapse" id="dashboard-collapse">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Overview</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Weekly</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Monthly</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Annually</a></li>
-            </ul>
-        </div>
-    </li>
+      <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
+              data-bs-toggle="collapse" data-bs-target="#ingredients-collapse" aria-expanded="false">
+          Składniki
+      </button>
+      <div class="collapse" id="ingredients-collapse">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+        <% ingredients.forEach(ingredient => { %>
+                  <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault<%=ingredient.ingredient_id%>">
+                    <label class="form-check-label" for="flexCheckDefault<%=ingredient.ingredient_id%>">
+                      <%= ingredient.ingredient_name %>
+                    </label>
+                  </div>
+                  </li>
+                <% }); %>
+        </ul>
+      </div>
+      
+      
+  </li>
     <li class="mb-1">
         <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
-                data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+                data-bs-toggle="collapse" data-bs-target="#diets-collapse" aria-expanded="false">
             Dieta
         </button>
-        <div class="collapse" id="orders-collapse">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">New</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Processed</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Shipped</a></li>
-                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded w-100">Returned</a></li>
-            </ul>
+        <div class="collapse" id="diets-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <% diets.forEach(diet => { %>
+                    <li>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault<%=diet.id%>">
+                      <label class="form-check-label" for="flexCheckDefault<%=diet.id%>">
+                        <%= diet.diet_name %>
+                      </label>
+                    </div>
+                    </li>
+                  <% }); %>
+          </ul>
         </div>
+        
+        
     </li>
     <li class="border-top my-3"></li>
     <li class="mb-1">

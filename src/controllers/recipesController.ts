@@ -311,6 +311,7 @@ export const addRecipe = async (req: Request, res: Response) : Promise<void> => 
 
 export const getRecipesPage = async (req: Request, res: Response) => {
   const query = req.query.q as string;
+  const ingredients = await getRecipes();
   let recipes;
   if (query)
   {
@@ -323,7 +324,7 @@ export const getRecipesPage = async (req: Request, res: Response) => {
         // recipes, bedzie zabierac duzo pamieci(wszystkie kolumny) ^^
         const diets = await getDiets();
         // console.log(recipes);
-        res.render("pages/recipes", {recipes: recipes, diets:diets, query:query});
+        res.render("pages/recipes", {recipes: recipes, diets:diets, query:query, ingredients:ingredients});
     }
 
 export const showRecipePage = async (req: Request, res: Response): Promise<void> => {
@@ -638,4 +639,14 @@ export const deleteRecipe = async (req: Request, res: Response): Promise<void> =
 
 };
 
+export const getIngredients = async ()=> {
+try{
+  const ingredientsResult = await client.query('SELECT * FROM INGREDIENTS');
+  const ingredients = ingredientsResult.rows; 
+  return ingredients;
+}
+catch(err){
+  console.log(err);
+}
+}
 
