@@ -324,8 +324,10 @@ export const getRecipesPage = async (req: Request, res: Response) => {
         // recipes, bedzie zabierac duzo pamieci(wszystkie kolumny) ^^
         const diets = await getDiets();
         const ingredients = await getIngredients();
+        const meals = await getMeals();
         // console.log(recipes);
-        res.render("pages/recipes", {recipes: recipes, diets:diets, query:query, ingredients:ingredients});
+        //console.log(meals);
+        res.render("pages/recipes", {recipes: recipes, diets:diets, query:query, ingredients:ingredients, meals:meals});
     }
 
 export const showRecipePage = async (req: Request, res: Response): Promise<void> => {
@@ -649,5 +651,14 @@ try{
 catch(err){
   console.log(err);
 }
-}
+};
 
+export const getMeals = async () => {
+  try {
+    const mealsResult = await client.query('SELECT DISTINCT meal FROM recipes');
+    return mealsResult.rows.map(row => row.meal); 
+  } catch (err) {
+    console.error("Błąd podczas pobierania posiłków:", err);
+    return [];
+  }
+};

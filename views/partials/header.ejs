@@ -84,6 +84,30 @@
         
         
     </li>
+    <li class="mb-1">
+      <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
+              data-bs-toggle="collapse" data-bs-target="#meals-collapse" aria-expanded="false">
+          Posiłek
+      </button>
+      <div class="collapse" id="meals-collapse">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <% if(typeof meals !== 'undefined') { %>
+        <% meals.forEach((meal,index) => { %>
+                  <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="meal_<%=index%>" />
+                    <label class="form-check-label" for="meal_<%= index %>">
+                      <%= meal %>
+                    </label>
+                  </div>
+                  </li>
+                <% }); %>
+        <% } %>
+        </ul>
+      </div>
+      
+      
+  </li>
     <li class="border-top my-3"></li>
    
 </ul>
