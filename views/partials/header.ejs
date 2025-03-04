@@ -11,13 +11,13 @@
 
       
   <button class="btn btn-outline-light btn-sm py-0 px-2 d-flex align-items-center"
-  id="add-categories-button"
+  id="filtersButton"
   type="button" 
   data-bs-toggle="offcanvas" 
   data-bs-target="#sidebar" 
   aria-controls="sidebar" 
   style="height: 31px;">
-    ☰Filtry
+    Filtry
   </button>
 
 <!-- Sidebar Offcanvas -->
@@ -46,6 +46,7 @@
       </button>
       <div class="collapse" id="ingredients-collapse">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <% if(typeof ingredients !== 'undefined'){ %>
         <% ingredients.forEach(ingredient => { %>
                   <li>
                   <div class="form-check">
@@ -57,6 +58,7 @@
                   </div>
                   </li>
                 <% }); %>
+        <% } %>
         </ul>
       </div>
       
@@ -69,6 +71,7 @@
         </button>
         <div class="collapse" id="diets-collapse">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <% if(typeof diets !== 'undefined') { %>
           <% diets.forEach(diet => { %>
                     <li>
                     <div class="form-check">
@@ -79,6 +82,7 @@
                     </div>
                     </li>
                   <% }); %>
+          <% } %>
           </ul>
         </div>
         
@@ -159,6 +163,11 @@
     const addRecipeButton = document.getElementById("add-recipe-btn");
     const addSearchField = document.getElementById("add-search-field");
     const addCategoryButton = document.getElementById("add-categories-button");
+    const filtersButton = document.getElementById("filtersButton");
+
+    if (!window.location.pathname.startsWith("/recipes")){
+      filtersButton.classList.add("invisible");;
+    }
 
     if (addRecipeButton && !window.location.pathname.startsWith("/recipes")) {
       addRecipeButton.classList.add("invisible");
@@ -177,4 +186,5 @@
       window.location.href = "/recipes";
     }
   });
+  
 </script>
