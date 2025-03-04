@@ -7,7 +7,7 @@ import { getRatings } from "./ratingsController";
 export const getRecipes = async () => {
   try {
       const recipes = await client.query(`
-          SELECT RECIPES.recipe_id, RECIPES.description, RECIPES.instruction, 
+          SELECT RECIPES.recipe_id, RECIPES.description, RECIPES.instruction, RECIPES.average_rating,
                  RECIPES.meal,  RECIPES.making_time,  RECIPES.bulk_cut, PHOTOS.photo, USERS.username
           FROM RECIPES
           LEFT JOIN PHOTOS ON RECIPES.recipe_id = PHOTOS.recipe_id
