@@ -209,4 +209,62 @@
     }
   });
   
+
+  document.addEventListener("DOMContentLoaded", function () {
+  const filterInputs = document.querySelectorAll("#sidebar input, #sidebar button");
+  
+  filterInputs.forEach(input => {
+    input.addEventListener("change", applyFilters);
+  });
+});
+
+function applyFilters() {
+  const filters = {};
+
+  // Redukcja / Masa
+  const switchInput = document.querySelector("#flexSwitchCheckDefault");
+  if (switchInput) {
+    filters.goal = switchInput.checked ? "masa" : "redukcja";
+  }
+
+  // Kalorie
+  const caloriesRange = document.querySelector("#customRange2");
+  if (caloriesRange) {
+    filters.calories = caloriesRange.value;
+  }
+
+  // Składniki
+  const ingredientCheckboxes = document.querySelectorAll("#ingredients-collapse input[type='checkbox']");
+  filters.ingredients = Array.from(ingredientCheckboxes)
+    .filter(checkbox => checkbox.checked)
+    .map(checkbox => checkbox.nextElementSibling.innerText);
+
+  // Dieta
+  const dietCheckboxes = document.querySelectorAll("#diets-collapse input[type='checkbox']");
+  filters.diets = Array.from(dietCheckboxes)
+    .filter(checkbox => checkbox.checked)
+    .map(checkbox => checkbox.nextElementSibling.innerText);
+
+  // Posiłek
+  const mealCheckboxes = document.querySelectorAll("#meals-collapse input[type='checkbox']");
+  filters.meals = Array.from(mealCheckboxes)
+    .filter(checkbox => checkbox.checked)
+    .map(checkbox => checkbox.nextElementSibling.innerText);
+
+  // Wyślij żądanie AJAX
+  fetchFilteredRecipes(filters);
+}
+function fetchFilteredRecipes(filters) {
+  fetch("/recipes/filter", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(filters),
+  })
+  .then(response => response.json())
+  .then(data => updateRecipeList(data))
+  .catch(error => console.error("Błąd podczas pobierania przepisów:", error));
+}
+
 </script>

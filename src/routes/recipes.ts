@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addRecipe, getRecipesPage,  showRecipePage, editRecipePage, updateRecipe , showMyRecipes ,deleteRecipe} from "../controllers/recipesController";
+import { addRecipe, getRecipesPage,  showRecipePage, editRecipePage, updateRecipe , showMyRecipes ,deleteRecipe, filterRecipes} from "../controllers/recipesController";
 import { isAuthenticated } from "../middleware/authMiddleware";
 
 
@@ -14,5 +14,7 @@ router.get("/edit_recipe/:id", editRecipePage);
 router.post("/edit_recipe/:id", updateRecipe);
 
 router.delete("/:id", deleteRecipe);
+
+router.post("/recipes/filter", filterRecipes);
 
 export default router;

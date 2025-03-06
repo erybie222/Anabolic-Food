@@ -662,3 +662,45 @@ export const getMeals = async () => {
     return [];
   }
 };
+
+export const filterRecipes = async (req:Request, res: Response) => {
+  try{
+
+    const {bulk_cut , calories, ingredients, diets, meals} = req.body;
+    let query = "SELECT * FROM recipes WHERE 1=1";
+    const params: any[] = [];
+
+      if (bulk_cut) {
+      query += " AND goal = ?";
+      params.push(bulk_cut);
+    }
+    if(calories){
+      query += "AND CALORIES <= ?"
+      params.push(calories)
+    }
+    if (ingredients && ingredients.length > 0) {
+      query += ` AND id IN (
+        SELECT recipe_id FROM recipe_ingredients WHERE ingredient_name IN (${ingredients.map(() => "?").join(", ")})
+      )`;
+      params.push(...ingredients);
+    }
+
+    if (diets && diets.length > 0) {
+      query += ` AND diet IN (${diets.map(() => "?").join(", ")})`;
+      params.push(...diets);
+    }
+
+    if (meals && meals.length > 0) {
+      query += ` AND meal IN (${meals.map(() => "?").join(", ")})`;
+      params.push(...meals);
+    }
+
+    const recipes = await db.query(query, params);
+    res.json(recipes.rows);
+  }  catch (error) {
+    console.error("Błąd filtrowania przepisów:", error);
+    res.status(500).json({ message: "Błąd serwera" });
+  }
+
+
+};
