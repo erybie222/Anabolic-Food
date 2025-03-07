@@ -184,6 +184,13 @@
     const addSearchField = document.getElementById("add-search-field");
     const addCategoryButton = document.getElementById("add-categories-button");
     const filtersButton = document.getElementById("filtersButton");
+    // Zakładając, że 'user' może być null, undefined lub obiektem
+    var user = `<%- JSON.stringify(user || null) %>`;
+
+    if (user !== "null") {
+      alert(`${user}`); // Teraz user jest poprawnym obiektem
+    }
+
 
     if (!window.location.pathname.startsWith("/recipes")){
       filtersButton.classList.add("invisible");;
