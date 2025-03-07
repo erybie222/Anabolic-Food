@@ -663,44 +663,53 @@ export const getMeals = async () => {
   }
 };
 
-export const filterRecipes = async (req:Request, res: Response) => {
-  try{
+export const filterRecipes = async (req: Request, res: Response) => {
+  try {
+    console.log("✅ Dane odebrane na backendzie:", req.body);
+    const { bulk_cut, calories_min, calories_max, ingredients, meals } = req.body;
 
-    const {bulk_cut , calories, ingredients, diets, meals} = req.body;
-    let query = "SELECT * FROM recipes WHERE 1=1";
+    let query = `
+      SELECT DISTINCT recipes.* FROM recipes
+      JOIN CALORIES ON recipes.recipe_id = CALORIES.recipe_id
+      LEFT JOIN RECIPES_INGREDIENTS ri ON recipes.recipe_id = ri.recipe_id
+      LEFT JOIN INGREDIENTS i ON ri.ingredient_id = i.ingredient_id
+      WHERE 1=1
+    `;
+
     const params: any[] = [];
+    let paramCounter = 1;
 
-      if (bulk_cut) {
-      query += " AND goal = ?";
+    if (bulk_cut !== undefined) {
+      query += ` AND recipes.bulk_cut = $${paramCounter++}`;
       params.push(bulk_cut);
     }
-    if(calories){
-      query += "AND CALORIES <= ?"
-      params.push(calories)
-    }
-    if (ingredients && ingredients.length > 0) {
-      query += ` AND id IN (
-        SELECT recipe_id FROM recipe_ingredients WHERE ingredient_name IN (${ingredients.map(() => "?").join(", ")})
-      )`;
-      params.push(...ingredients);
+
+    if (calories_min && calories_max) {
+      query += ` AND CALORIES.calories BETWEEN $${paramCounter++} AND $${paramCounter++}`;
+      params.push(calories_min, calories_max);
     }
 
-    if (diets && diets.length > 0) {
-      query += ` AND diet IN (${diets.map(() => "?").join(", ")})`;
-      params.push(...diets);
+    if (ingredients && ingredients.length > 0) {
+      query += `
+        AND recipes.recipe_id IN (
+          SELECT ri.recipe_id FROM RECIPES_INGREDIENTS ri
+          JOIN INGREDIENTS i ON ri.ingredient_id = i.ingredient_id
+          WHERE i.ingredient_name = ANY($${paramCounter++})
+          GROUP BY ri.recipe_id
+          HAVING COUNT(DISTINCT i.ingredient_name) = $${paramCounter++}
+        )`;
+      params.push(ingredients, ingredients.length);
     }
 
     if (meals && meals.length > 0) {
-      query += ` AND meal IN (${meals.map(() => "?").join(", ")})`;
-      params.push(...meals);
+      query += ` AND recipes.meal = ANY($${paramCounter++})`;
+      params.push(meals);
     }
 
-    const recipes = await db.query(query, params);
+    const recipes = await client.query(query, params);
     res.json(recipes.rows);
-  }  catch (error) {
-    console.error("Błąd filtrowania przepisów:", error);
+  } catch (error) {
+    console.error("❌ Błąd filtrowania przepisów:", error);
     res.status(500).json({ message: "Błąd serwera" });
   }
-
-
 };

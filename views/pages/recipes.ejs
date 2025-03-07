@@ -15,6 +15,7 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+    <script defer src="/filters.js"></script>
   </head>
   <body data-bs-theme="dark">
     <div class ="container h-100" >
@@ -204,7 +205,7 @@
 
    
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+    <div id="recipes-container" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
       <% recipes.forEach(recipe => { %>
         <div class="col">
           <div class="card shadow-sm">

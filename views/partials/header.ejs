@@ -1,80 +1,95 @@
-<div class="container" data-bs-theme="dark">
-  <header class="row align-items-center py-3 mb-4 border-bottom">
-    
-    <!-- Lewa sekcja: Logo + Dodaj Przepis + SearchBar -->
-    <div class="col-lg-4 col-md-5 col-12 d-flex align-items-center gap-2">
-     
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Przepisy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.css" rel="stylesheet">
 
-      
-  <button class="btn btn-outline-light btn-sm py-0 px-2 d-flex align-items-center"
-  id="filtersButton"
-  type="button" 
-  data-bs-toggle="offcanvas" 
-  data-bs-target="#sidebar" 
-  aria-controls="sidebar" 
-  style="height: 31px;">
-    Filtry
-  </button>
+  </head>
 
-<!-- Sidebar Offcanvas -->
-<div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel" style="max-width: 300px;">
-<div class="offcanvas-header">
-<h5 class="offcanvas-title" id="sidebarLabel">Filtry</h5>
-<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-</div>
-<div class="offcanvas-body">
-<ul class="list-unstyled w-100">
-    <li class="mb-1">
-      <div class="d-flex form-check form-switch" >
-        <span>Redukcja</span>
-        <input class="form-check-input mx-2" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-        <span>Masa</span>
-      </div>
-    </li>
-    <li class ="mb-1">
-      <label for="customRange2" class="form-label">Kalorie</label>
-<input type="range" class="form-range" min="0" max="5" id="customRange2">
-    </li>
-    <li class="mb-1">
-      <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
-              data-bs-toggle="collapse" data-bs-target="#ingredients-collapse" aria-expanded="false">
-          Składniki
-      </button>
-      <div class="collapse" id="ingredients-collapse">
-        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-          <% if(typeof ingredients !== 'undefined'){ %>
-        <% ingredients.forEach(ingredient => { %>
-                  <li>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault<%=ingredient.ingredient_id%>">
-                    <label class="form-check-label" for="flexCheckDefault<%=ingredient.ingredient_id%>">
-                      
-                      <%= ingredient.ingredient_name %>
-                    </label>
+  <body data-bs-theme="dark">
+    <div class="container">
+      <header class="row align-items-center py-3 mb-4 border-bottom">
+        <!-- Lewa sekcja: Logo + Dodaj Przepis + SearchBar -->
+        <div class="col-lg-4 col-md-5 col-12 d-flex align-items-center gap-2">
+          <button
+            class="btn btn-outline-light btn-sm py-0 px-2 d-flex align-items-center"
+            id="filtersButton"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#sidebar"
+            aria-controls="sidebar"
+            style="height: 31px"
+          >
+            Filtry
+          </button>
+
+          <!-- Sidebar Offcanvas -->
+          <div
+            class="offcanvas offcanvas-start"
+            tabindex="-1"
+            id="sidebar"
+            aria-labelledby="sidebarLabel"
+            style="max-width: 300px"
+          >
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="sidebarLabel">Filtry</h5>
+              <button
+                type="button"
+                class="btn-close text-reset"
+                data-bs-dismiss="offcanvas"
+              ></button>
+            </div>
+            <div class="offcanvas-body">
+              <ul class="list-unstyled w-100">
+                <!-- Redukcja / Masa -->
+                <li class="mb-1">
+                  <div class="d-flex form-check form-switch">
+                    <span>Redukcja</span>
+                    <input
+  class="form-check-input mx-2"
+  type="checkbox"
+  id="flexSwitchCheckDefault"
+/>
+                    <span>Masa</span>
                   </div>
-                  </li>
-                <% }); %>
-        <% } %>
-        </ul>
-      </div>
-      
-      
-  </li>
-    <li class="mb-1">
-        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
-                data-bs-toggle="collapse" data-bs-target="#diets-collapse" aria-expanded="false">
-            Dieta
+                </li>
+
+                <!-- Kalorie -->
+                <div class="mb-4">
+                  <label class="form-label">Kalorie: <span id="calories-range"></span></label>
+                  <div id="calories-slider"></div>
+                </div>
+
+                
+                <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
+                data-bs-toggle="collapse" data-bs-target="#ingredients-collapse" aria-expanded="false">
+            Składniki
         </button>
-        <div class="collapse" id="diets-collapse">
+        <div class="collapse" id="ingredients-collapse">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <% if(typeof diets !== 'undefined') { %>
-          <% diets.forEach(diet => { %>
+            <% if(typeof ingredients !== 'undefined'){ %>
+          <% ingredients.forEach(ingredient => { %>
                     <li>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault<%=diet.id%>">
-                      <label class="form-check-label" for="flexCheckDefault<%=diet.id%>">
-                        <%= diet.diet_name %>
-                      </label>
+
+                      <input 
+                      class="form-check-input"
+                      type="checkbox"
+                      value="<%=ingredient.ingredient_name%>" 
+                      id="flexCheckDefault<%=ingredient.ingredient_id%>"
+                    >
+                    <label class="form-check-label" for="flexCheckDefault<%=ingredient.ingredient_id%>">
+                      <%= ingredient.ingredient_name %>
+                    </label>
+                        
+                       
                     </div>
                     </li>
                   <% }); %>
@@ -84,21 +99,31 @@
         
         
     </li>
-    <li class="mb-1">
-      <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100" 
-              data-bs-toggle="collapse" data-bs-target="#meals-collapse" aria-expanded="false">
-          Posiłek
-      </button>
+    <button
+  class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed w-100"
+  data-bs-toggle="collapse"
+  data-bs-target="#meals-collapse"
+  aria-expanded="false"
+>
+  Posiłek
+</button>
       <div class="collapse" id="meals-collapse">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
           <% if(typeof meals !== 'undefined') { %>
         <% meals.forEach((meal,index) => { %>
                   <li>
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="meal_<%=index%>" />
-                    <label class="form-check-label" for="meal_<%= index %>">
-                      <%= meal %>
-                    </label>
+
+                    <input 
+  class="form-check-input"
+  type="checkbox"
+  value="<%= meal %>"
+  id="meal_<%=index%>"
+>
+<label class="form-check-label" for="meal_<%= index %>">
+  <%= meal %>
+</label>
+
                   </div>
                   </li>
                 <% }); %>
@@ -108,163 +133,145 @@
       
       
   </li>
-    <li class="border-top my-3"></li>
-   
-</ul>
-</div>
-</div>
+                  <li class="border-top my-3"></li>
+              </ul>
 
+              <!-- Przycisk Filtruj poza UL -->
+              <div class="d-grid">
+                <button id="applyFiltersButton" class="btn btn-primary mt-3">
+                  Filtruj
+                </button>
+              </div>
+            </div>
+          </div>
 
-      <form action="/recipes" method="GET" class="flex-grow-1">
-        <input 
-          type="search" 
-          name="q" 
-          class="form-control form-control-sm" 
-          id="add-search-field"
-          placeholder="Szukaj przepisu..." 
-          aria-label="Search"
-        />
-      </form>
+          <form action="/recipes" method="GET" class="flex-grow-1">
+            <input
+              type="search"
+              name="q"
+              class="form-control form-control-sm"
+              placeholder="Szukaj przepisu..."
+            />
+          </form>
 
-      <button type="button" class="btn btn-success btn-sm flex-shrink-0" id="add-recipe-btn">
-        Dodaj przepis
-      </button>
+          <button
+            type="button"
+            class="btn btn-success btn-sm"
+            id="add-recipe-btn"
+          >
+            Dodaj przepis
+          </button>
+        </div>
 
-    </div>
-
-    <!-- Środkowa sekcja: Nawigacja -->
-    <div class="col-lg-4 col-md-2 d-none d-md-flex justify-content-center">
-      <ul class="nav">
-        <li>  <a href="/" class="nav-link px-2 text-light">Strona główna</a></li>
-        <li><a href="/recipes" class="nav-link px-2 text-light">Przepisy</a></li>
-        <li><a href="/about" class="nav-link px-2 text-light">O nas</a></li>
-        <li><a href="/calculator/step-one" class="nav-link px-2 text-light">Kalkulator</a></li>
-      </ul>
-    </div>
-
-    <!-- Prawa sekcja: Logowanie -->
-    <div class="col-lg-4 col-md-5 col-12 d-flex align-items-center justify-content-end gap-2">
-      <% if(user) { %>
-        <%= user.username %>
-        <div class="dropdown">
-          <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person rounded-circle" viewBox="0 0 16 16">
-              <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
-            </svg>
-          </a>
-          <ul class="dropdown-menu text-small">
-            <li><a class="dropdown-item" href="/recipes/my_recipes">Moje przepisy</a></li>
-            <!-- <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><a class="dropdown-item" href="#">Profile</a></li> -->
-            <!-- <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/auth/logout">Sign out</a></li> -->
+        <!-- Nawigacja -->
+        <div class="col-lg-4 col-md-2 d-none d-md-flex justify-content-center">
+          <ul class="nav">
+            <li>
+              <a href="/" class="nav-link px-2 text-light">Strona główna</a>
+            </li>
+            <li>
+              <a href="/recipes" class="nav-link px-2 text-light">Przepisy</a>
+            </li>
+            <li><a href="/about" class="nav-link px-2 text-light">O nas</a></li>
+            <li>
+              <a href="/calculator/step-one" class="nav-link px-2 text-light"
+                >Kalkulator</a
+              >
+            </li>
           </ul>
         </div>
-        
 
-        <button type="button" class="btn btn-danger btn-sm" onclick="window.location.href='/auth/logout'">
-          Wyloguj się
-        </button>
-      <% } else { %>
-        <button type="button" class="btn btn-outline-primary btn-sm" onclick="window.location.href='/login'">
-          Zaloguj się
-        </button>
-        <button type="button" class="btn btn-primary btn-sm ms-2" onclick="window.location.href='/register'">
-          Zarejestruj się
-        </button>
-      <% } %>
+        <!-- Logowanie -->
+        <div class="col-lg-4 col-md-5 col-12 d-flex justify-content-end">
+          <!-- Twój kod logowania EJS -->
+        </div>
+      </header>
     </div>
 
-  </header>
-</div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const addRecipeButton = document.getElementById("add-recipe-btn");
-    const addSearchField = document.getElementById("add-search-field");
-    const addCategoryButton = document.getElementById("add-categories-button");
-    const filtersButton = document.getElementById("filtersButton");
+    <!-- SLIDER -->
+    <script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.js"></script>
 
-    if (!window.location.pathname.startsWith("/recipes")){
-      filtersButton.classList.add("invisible");;
-    }
+    <!-- Twój JS -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
 
-    if (addRecipeButton && !window.location.pathname.startsWith("/recipes")) {
-      addRecipeButton.classList.add("invisible");
-    }
-    if (window.location.pathname.startsWith("/recipes/show_recipe")) {
-      addRecipeButton.classList.add("invisible");
-      addSearchField.classList.add("invisible");
-      addCategoryButton.classList.add("invisible");
-    }
-    if (window.location.pathname.startsWith("/login") || window.location.pathname.startsWith("/register")){
-      addSearchField.classList.add("invisible");
-      addCategoryButton.remove();
-    }
+// Listener na przycisk "Filtruj"
+const applyFiltersButton = document.getElementById("applyFiltersButton");
+if (applyFiltersButton) {
+  applyFiltersButton.addEventListener("click", () => {
+    console.log("✅ Przycisk filtruj został kliknięty!");
+    applyFilters();
   });
-  document.getElementById("add-recipe-btn").addEventListener("click", function () {
-    if (window.location.pathname.startsWith("/recipes/my_recipes")) {
-      sessionStorage.setItem("showFormOnce", "true"); // Ustaw flagę
-      window.location.href = "/recipes";
-    }
-  });
-  
+} else {
+  console.log("❌ Brak przycisku applyFiltersButton w HTML");
+}
 
-  document.addEventListener("DOMContentLoaded", function () {
-  const filterInputs = document.querySelectorAll("#sidebar input, #sidebar button");
-  
-  filterInputs.forEach(input => {
-    input.addEventListener("change", applyFilters);
-  });
+// Slider kalorii
+const caloriesSlider = document.getElementById('calories-slider');
+const caloriesRange = document.getElementById('calories-range');
+
+noUiSlider.create(caloriesSlider, {
+  start: [100, 800],
+  connect: true,
+  range: {
+    min: 0,
+    max: 2000,
+  },
+  step: 50,
+  tooltips: [true, true],
 });
 
+caloriesSlider.noUiSlider.on('update', (values) => {
+  caloriesRange.innerHTML = `${Math.round(values[0])} - ${Math.round(values[1])} kcal`;
+});
+
+});
+      
+
 function applyFilters() {
-  const filters = {};
+    console.log("🚀 applyFilters() został uruchomiony!");
 
-  // Redukcja / Masa
-  const switchInput = document.querySelector("#flexSwitchCheckDefault");
-  if (switchInput) {
-    filters.goal = switchInput.checked ? "masa" : "redukcja";
-  }
+    const calorieValues = document.getElementById('calories-slider').noUiSlider.get();
 
-  // Kalorie
-  const caloriesRange = document.querySelector("#customRange2");
-  if (caloriesRange) {
-    filters.calories = caloriesRange.value;
-  }
+    const selectedIngredients = Array.from(document.querySelectorAll("#ingredients-collapse input[type='checkbox']:checked"))
+        .map(el => el.value);
 
-  // Składniki
-  const ingredientCheckboxes = document.querySelectorAll("#ingredients-collapse input[type='checkbox']");
-  filters.ingredients = Array.from(ingredientCheckboxes)
-    .filter(checkbox => checkbox.checked)
-    .map(checkbox => checkbox.nextElementSibling.innerText);
+    const selectedMeals = Array.from(document.querySelectorAll("#meals-collapse input[type='checkbox']:checked"))
+        .map(el => el.value);
 
-  // Dieta
-  const dietCheckboxes = document.querySelectorAll("#diets-collapse input[type='checkbox']");
-  filters.diets = Array.from(dietCheckboxes)
-    .filter(checkbox => checkbox.checked)
-    .map(checkbox => checkbox.nextElementSibling.innerText);
+    console.log("📌 Zaznaczone składniki:", selectedIngredients);
+    console.log("📌 Zaznaczone posiłki:", selectedMeals);
 
-  // Posiłek
-  const mealCheckboxes = document.querySelectorAll("#meals-collapse input[type='checkbox']");
-  filters.meals = Array.from(mealCheckboxes)
-    .filter(checkbox => checkbox.checked)
-    .map(checkbox => checkbox.nextElementSibling.innerText);
+    const filters = {
+        bulk_cut: document.querySelector("#flexSwitchCheckDefault").checked,
+        calories_min: Number(calorieValues[0]),
+        calories_max: Number(calorieValues[1]),
+        ingredients: selectedIngredients.length > 0 ? selectedIngredients : undefined,
+        meals: selectedMeals.length > 0 ? selectedMeals : undefined,
+    };
 
-  // Wyślij żądanie AJAX
-  fetchFilteredRecipes(filters);
+    console.log("🧐 Wysyłane filtry:", JSON.stringify(filters, null, 2));
+
+    fetch("/recipes/filter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(filters),
+    })
+    .then(response => {
+        if (!response.ok) throw new Error(`Błąd HTTP: ${response.status}`);
+        return response.json();
+    })
+    .then(data => updateRecipeList(data))
+    .catch(err => console.error("❌ Błąd AJAX:", err));
 }
-function fetchFilteredRecipes(filters) {
-  fetch("/recipes/filter", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(filters),
-  })
-  .then(response => response.json())
-  .then(data => updateRecipeList(data))
-  .catch(error => console.error("Błąd podczas pobierania przepisów:", error));
-}
+      function updateRecipeList(recipes) {
+        console.log("✅ Przepisy:", recipes);
+      }
 
-</script>
+    </script>
+  </body>
+</html>
+

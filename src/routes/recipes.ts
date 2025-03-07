@@ -15,6 +15,6 @@ router.post("/edit_recipe/:id", updateRecipe);
 
 router.delete("/:id", deleteRecipe);
 
-router.post("/recipes/filter", filterRecipes);
+router.post("/filter", filterRecipes);
 
 export default router;
