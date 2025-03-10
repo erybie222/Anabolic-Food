@@ -64,7 +64,7 @@ app.use((req, res, next) => {
 });
 
 
-
+console.log("DATABASE_URL:", process.env.DATABASE_URL);
 connectDB();
 
 
