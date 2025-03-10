@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "ts-node src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node src/index.ts"
+     "start": "DATABASE_URL=$DATABASE_URL ts-node src/index.ts"
   },
   "repository": {
     "type": "git",
