@@ -4,11 +4,11 @@
   "description": "",
   "type": "commonjs",
   "main": "index.ts",
-  "scripts": {
-    "dev": "ts-node src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
-     "start": "ts-node src/index.ts"
-  },
+ "scripts": {
+  "start": "ts-node src/index.ts",
+  "build": "tsc"
+}
+,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/erybie222/Anabolic-Food.git"
