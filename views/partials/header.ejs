@@ -188,7 +188,8 @@
     var user = `<%- JSON.stringify(user || null) %>`;
 
     if (user !== "null") {
-      alert(`${user}`); // Teraz user jest poprawnym obiektem
+      const userObj = JSON.parse(user); // Parsujemy tylko wtedy, gdy user istnieje
+      alert(`${userObj.username}`); // Teraz user jest poprawnym obiektem
     }
 
 
